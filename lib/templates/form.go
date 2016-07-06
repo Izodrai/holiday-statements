@@ -56,6 +56,8 @@ var Top string =
 	</head>
 
 	<body>
+	
+<a href="/"> <input type="button" value="Actualiser"> </a>
 `
 
 var TopNothing string =
@@ -69,5 +71,8 @@ var TopNothing string =
 	</head>
 		
 	<body>
+	
+<a href="/"> <input type="button" value="Actualiser"> </a>
+
 		<p>Nothing to add</p>
 `
