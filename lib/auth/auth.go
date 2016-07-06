@@ -1,17 +1,15 @@
-package main
+package auth
 
 import (
 	"encoding/base64"
 	"net/http"
 	"strings"
-	"encoding/json"
-	"io/ioutil"
-	"./lib/tools"
+	"../config"
 )
 
-type handler func(w http.ResponseWriter, r *http.Request)
+type Handler func(w http.ResponseWriter, r *http.Request)
 
-func BasicAuth(pass handler, users map[string]User) handler {
+func BasicAuth(pass Handler, users map[string]config.User) Handler {
 
     return func(w http.ResponseWriter, r *http.Request) {
 
@@ -39,29 +37,4 @@ func Validate(username, password string) bool {
         return true
     }
     return false
-}
-
-
-type User struct {
-	user   string `json:"user"`
-	pwd    string `json:"pwd"`
-	rights int    `json:"rights"`
-}
-
-func LoadUsers(users map[string]User) error {
-	
-	tools.Info("1")
-	
-	usersConfigFile, err := ioutil.ReadFile("config/users.json")
-	if err != nil {
-		return err
-	}
-	tools.Info("2")
-
-	if err := json.Unmarshal([]byte(usersConfigFile), &users); err != nil {
-		return err
-	}
-	tools.Info("3")
-	
-	return nil
 }

@@ -1,30 +1,38 @@
 package main
 
 import (
-// 	"log"
-// 	"net/http"
+	"os"
+	"log"
+	"net/http"
 	"./lib/tools"
+	"./lib/routes"
 )
 
 func main() {
 
 	tools.InitLog(true)
 	
-	var err error
-	var users = make(map[string]User)
+	tools.Info("Working")
 	
-	if err = LoadUsers(users); err != nil {
-		tools.FatalError(err)
-		return
+	err := os.Remove("save.csv")
+	if err != nil {
+		if !os.IsNotExist(err) {
+			panic(err)
+		}
 	}
 	
-	tools.Info(users)
+	f, err := os.OpenFile("save.csv", os.O_APPEND|os.O_CREATE|os.O_RDWR, os.ModeAppend|0755)
+	if err != nil {
+		panic(err)
+	}
 	
-// 	// public views
-// 	http.HandleFunc("/", HandleIndex)
-// 
-// 	// private views
-// 	http.HandleFunc("/post", PostOnly(BasicAuth(HandlePost,users)))
-// 
-// 	log.Fatal(http.ListenAndServe(":8080", nil))
+	if _, err := f.Write([]byte("date;montant;by;emma;;justine;;valentin;;jerome;;Nfor\n")); err != nil {
+		panic(err)
+	}
+	
+	f.Close()
+	
+	http.HandleFunc("/", routes.HandleIndex)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

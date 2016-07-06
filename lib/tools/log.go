@@ -7,6 +7,26 @@ import (
 	"github.com/cheggaaa/pb"
 )
 
+type Result struct {
+	Tot       float64
+	TotV      float64
+	TotE      float64
+	TotJu     float64
+	TotJe     float64
+	Debts     map[string]map[string]float64
+	NPer      int
+	Average   float64
+}
+
+type Depense struct {
+	Date    string
+	Payeur  string
+	Montant float64
+	For     map[string]float64
+	NFor    int
+	Desc    string
+}
+
 /*
  * Const for colors
  */
@@ -72,7 +92,8 @@ func InitLog(d bool) {
  */
 
 func FatalError(v ...interface{}) {
-	panic(v)
+	loggerError.Println(RED+fmt.Sprint(v...)+STOP)
+	os.Exit(0)
 }
 func Error(v ...interface{}) {
 	loggerError.Println(RED+fmt.Sprint(v...)+STOP)
