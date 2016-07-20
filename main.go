@@ -1,11 +1,9 @@
 package main
 
 import (
-	"os"
-	"log"
-	"net/http"
+	"time"
 	"./lib/tools"
-	"./lib/routes"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -14,25 +12,22 @@ func main() {
 	
 	tools.Info("Working")
 	
-	err := os.Remove("save.csv")
-	if err != nil {
-		if !os.IsNotExist(err) {
-			panic(err)
-		}
-	}
+	router := gin.New()
 	
-	f, err := os.OpenFile("save.csv", os.O_APPEND|os.O_CREATE|os.O_RDWR, os.ModeAppend|0755)
-	if err != nil {
-		panic(err)
-	}
+	router.LoadHTMLFiles("lib/templates/index.templ.html", "lib/templates/login.templ.html")
 	
-	if _, err := f.Write([]byte("date;montant;by;emma;;justine;;valentin;;jerome;;Nfor\n")); err != nil {
-		panic(err)
-	}
+	router.GET("/", index)
+	router.GET("/login", login)
 	
-	f.Close()
-	
-	http.HandleFunc("/", routes.HandleIndex)
+	router.Run(":8080")
+}
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+func index(c *gin.Context) {
+	c.Redirect(301, "/login")
+}
+
+func login(c *gin.Context) {
+	c.HTML(200, "login.templ.html", gin.H{
+		"timestamp": time.Now().Unix(),
+	})
 }
