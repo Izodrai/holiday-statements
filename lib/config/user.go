@@ -8,7 +8,7 @@ import (
 type User struct {
 	User   string `json:"user"`
 	Pwd    string `json:"pwd"`
-// 	Rights int    `json:"rights"`
+	Rights int    `json:"rights"`
 }
 
 func LoadUsers(users map[string]User) error {
