@@ -1,38 +1,50 @@
 package main
 
 import (
-	"os"
-	"log"
-	"net/http"
+// 	"log"
+// 	"net/http"
+	"./lib/db"
 	"./lib/tools"
-	"./lib/routes"
+	localAuth "./lib/auth"
+// 	"./lib/routes/index"
+// 	"./lib/routes/events"
+// 	"./lib/routes/users"
+// 	auth "github.com/abbot/go-http-auth"
 )
 
-func main() {
 
-	tools.InitLog(true)
+
+func main() {
 	
+// 	userAuth := auth.NewBasicAuthenticator("Current Authentication", localAuth.UserSecret)
+// 	adminAuth := auth.NewBasicAuthenticator("Admin Authentication", localAuth.AdminSecret)
+// 	
+// 	http.HandleFunc("/", index.HandleDefault)
+// 	
+// 	http.HandleFunc("/index", userAuth.Wrap(index.HandleIndex))
+// 	
+// 	http.HandleFunc("/events", userAuth.Wrap(events.HandleEvents))
+// 	
+// 	http.HandleFunc("/users", adminAuth.Wrap(users.HandleUsers))
+
 	tools.Info("Working")
 	
-	err := os.Remove("save.csv")
-	if err != nil {
-		if !os.IsNotExist(err) {
-			panic(err)
-		}
-	}
-	
-	f, err := os.OpenFile("save.csv", os.O_APPEND|os.O_CREATE|os.O_RDWR, os.ModeAppend|0755)
-	if err != nil {
-		panic(err)
-	}
-	
-	if _, err := f.Write([]byte("date;montant;by;emma;;justine;;valentin;;jerome;;Nfor\n")); err != nil {
-		panic(err)
-	}
-	
-	f.Close()
-	
-	http.HandleFunc("/", routes.HandleIndex)
+// 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+
+
+func init() {
+	tools.InitLog(true)
+	
+	if err := db.Init(); err != nil {
+		tools.FatalError(err)
+	}
+	
+	if err := localAuth.Init(); err != nil {
+		tools.FatalError(err)
+	}
+	
+	
+	
 }
