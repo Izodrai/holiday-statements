@@ -4,8 +4,8 @@ var Users map[string]User
 var Admins map[string]User
 
 type User struct {
-	Login string
+	Login    string
 	Password string
-	Email string
-	Admin bool
+	Email    string
+	Admin    bool
 }

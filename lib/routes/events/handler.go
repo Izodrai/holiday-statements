@@ -1,15 +1,15 @@
 package events
 
 import (
-	"fmt"
-	"net/http"
 	"../../tools"
+	"fmt"
 	"github.com/abbot/go-http-auth"
+	"net/http"
 )
 
 func HandleEvents(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
-	
+
 	tools.Info("events")
-	
-	fmt.Fprint(w,`<html>`+tools.Menu+`<p>events</p>`,r.Username)
+
+	fmt.Fprint(w, `<html>`+tools.Menu+`<p>events</p>`, r.Username)
 }

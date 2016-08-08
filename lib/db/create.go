@@ -1,9 +1,9 @@
 package db
 
 import (
-	"io/ioutil"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
+	"io/ioutil"
 )
 
 func CreateDatabase(db *sql.DB) error {
@@ -11,11 +11,11 @@ func CreateDatabase(db *sql.DB) error {
 	if err != nil {
 		return err
 	}
-	
+
 	_, err = db.Exec(string(sqlb))
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }

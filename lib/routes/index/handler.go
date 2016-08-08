@@ -1,10 +1,10 @@
 package index
 
 import (
-	"net/http"
-	"../../tools"
 	tmpl "../../templates"
+	"../../tools"
 	"github.com/abbot/go-http-auth"
+	"net/http"
 )
 
 func HandleDefault(w http.ResponseWriter, r *http.Request) {
@@ -13,13 +13,13 @@ func HandleDefault(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleIndex(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
-	
+
 	info := struct {
-		Title string
+		Title        string
 		Participants []string
 	}{
-		Title : "index",
-		Participants : []string{
+		Title: "index",
+		Participants: []string{
 			"Valentin",
 			"Emma",
 			"Justine",
@@ -27,6 +27,6 @@ func HandleIndex(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 			"Vincent",
 		},
 	}
-	
+
 	tmpl.TemplateMe(w, r, "lib/templates/index/index.html", info)
 }
