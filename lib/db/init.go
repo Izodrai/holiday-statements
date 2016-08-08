@@ -9,29 +9,30 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var DbConnect *sql.DB
+
 func Init() error {
 	
 	os.Remove("./db/save/spending.db") // to remove
 	
-	var db *sql.DB
 	var err error
 	var rows *sql.Rows
 	
-	db, err = sql.Open("sqlite3", "./db/save/spending.db")
+	
+	DbConnect, err = sql.Open("sqlite3", "./db/save/spending.db")
 	if err != nil {
 		return err
 	}
-	defer db.Close()
-
+	
 	tools.GreenInfo("sqlite connected")
 	
 architecture_test:
 
-	rows, err = db.Query("select id, login from users limit 1")
+	rows, err = DbConnect.Query("select id, login from users limit 1")
 	if err != nil {
 		if strings.Contains(err.Error(), "no such table: users") {
 			tools.Info("sqlite empty, we need to feed it!")
-			if err = CreateDatabase(db); err != nil {
+			if err = CreateDatabase(DbConnect); err != nil {
 				return err
 			}
 			tools.Info("sqlite generated")
@@ -48,7 +49,7 @@ architecture_test:
 		
 // 		tools.WhiteInfo("Login : ", login, " with id : ", id)
 		
-		if login != "vp" || id != "1" {
+		if login != "admin" || id != "1" {
 			return errors.New("bad values")
 		}
 	}

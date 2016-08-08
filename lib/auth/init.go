@@ -1,9 +1,9 @@
 package auth
 
 import (
+	"../db"
 	"../tools"
-	"io/ioutil"
-	"encoding/json"
+	"database/sql"
 )
 
 func Init() error {
@@ -26,13 +26,25 @@ func Init() error {
 
 func loadUsers(users map[string]tools.User) error {
 	
-	file, err := ioutil.ReadFile("config/users.json")
+	var err error
+	var rows *sql.Rows
+	
+	rows, err = db.DbConnect.Query("select login, pwd, email, rights from users;")
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 	
-	if err := json.Unmarshal([]byte(file), &users); err != nil {
-		return err
+	for rows.Next() {
+		
+		var user tools.User
+		
+		err = rows.Scan(&user.Login, &user.Password, &user.Email, &user.Admin)
+		if err != nil {
+			return err
+		}
+		
+		users[user.Login]=user
 	}
 	
 	return nil
