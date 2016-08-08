@@ -14,5 +14,5 @@ func HandleUsers(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	b, _ := bcrypt.GenerateFromPassword([]byte("vp"), 10)
 	tools.Info(string(b))
 
-	fmt.Fprint(w, `<html>`+tools.Menu+`<p>users</p>`, r.Username)
+	fmt.Fprint(w, `<html>`+/*tools.Menu+*/`<p>users</p>`, r.Username)
 }
