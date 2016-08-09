@@ -17,5 +17,5 @@ func TemplateMe(w http.ResponseWriter, r *auth.AuthenticatedRequest, page string
 
 	tmpl.Execute(w, info)
 
-	tools.Info("Connection to -> ", r.Host, r.URL, " -> Status : ", http.StatusOK, " -> For : ", r.Username)
+	tools.Info("Requests to -> ", r.Host, r.URL, " -> Status : ", http.StatusOK, " -> For : ", r.Username)
 }

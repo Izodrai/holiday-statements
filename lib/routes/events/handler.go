@@ -1,15 +1,29 @@
 package events
 
 import (
+	tmpl "../../templates"
 	"../../tools"
-	"fmt"
 	"github.com/abbot/go-http-auth"
 	"net/http"
 )
 
 func HandleEvents(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 
-	tools.Info("events")
+	nav := tools.GenerateNav(r.Username)
+	
+	info := struct {
+		Title        string
+		Nav          []string
+		Participants []string
+	}{
+		Title: "events",
+		Nav: nav,
+		Participants: []string{
+			"Valentin",
+			"Emma",
+			"Justine",
+		},
+	}
 
-	fmt.Fprint(w, `<html>`/*+tools.Menu*/+`<p>events</p>`, r.Username)
+	tmpl.TemplateMe(w, r, "lib/templates/events/events.html", info)
 }

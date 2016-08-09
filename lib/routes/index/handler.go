@@ -8,13 +8,12 @@ import (
 )
 
 func HandleDefault(w http.ResponseWriter, r *http.Request) {
-	tools.Info("/")
 	http.Redirect(w, r, "/index", 301)
 }
 
 func HandleIndex(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 
-	tools.Info(r.URL.Query())
+// 	tools.Info(r.URL.Query())
 	
 // 	r.ParseForm()
 // 	payeur, _ = r.PostForm["payeur"]
@@ -25,17 +24,20 @@ func HandleIndex(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 // 	tools.Info("test1 : ", test1)
 // 	tools.Info("test2 : ", test2)
 	
+	
+	nav := tools.GenerateNav(r.Username)
+	
 	info := struct {
 		Title        string
+		Nav          []string
 		Participants []string
 	}{
 		Title: "index",
+		Nav: nav,
 		Participants: []string{
 			"Valentin",
 			"Emma",
 			"Justine",
-			"Jérôme",
-			"Vincent",
 		},
 	}
 
