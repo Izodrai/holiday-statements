@@ -31,7 +31,7 @@ architecture_test:
 	if err != nil {
 		if strings.Contains(err.Error(), "no such table: users") {
 			tools.Info("sqlite empty, we need to feed it!")
-			if err = CreateDatabase(DbConnect); err != nil {
+			if err = CreateDatabase(); err != nil {
 				return err
 			}
 			tools.Info("sqlite generated")

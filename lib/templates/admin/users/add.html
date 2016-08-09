@@ -1,12 +1,50 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<!-- En-tête de la page -->
-		<meta charset="utf-8" />
-		<title>admin user add</title>
-	</head>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="../statics/style.css" />
+	<title>{{.Title}}</title>
+</head>
 
-	<body>
-		<h1>admin user add</h1>
-		<p>Work In Progress</p>
-	</body>
+<body>
+	<h1>{{.Title}}</h1>
+	<nav>
+		<ul>
+			{{range .Nav}}
+			<li><a href="{{ . }}">{{ . }}</a></li>
+			{{end}}
+		</ul>
+	</nav>
+	
+	
+	
+	{{if .Error -}}
+		<h4>Erreur lors de l'ajout de cet utilisateur</h4>
+	{{else}}
+		{{if .Added -}}
+			<h4>Utilisateur {{ .User.Login }} ajouté</h4>
+		{{- end}}
+	{{- end}}
+	
+	<table style="border-style:solid">
+		<form name="addUser" method="post" action="/users?add">
+			<tr>
+				<td>login :</td>
+				<td><input type="text" name="login"/></td>
+			</tr>
+			<tr>
+				<td>email :</td>
+				<td><input type="text" name="email"/></td>
+			</tr>
+			<tr>
+				<td>password :</td>
+				<td><input type="password" name="pass" id="pass" /></td>
+			</tr>
+			
+			<tr>
+				<td colspan="2"><input type="submit" name="addThisUser" value="ok"/></td>
+			</tr>
+		</form>
+	</table>
+</body>
 </html>
