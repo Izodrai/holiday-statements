@@ -1,8 +1,27 @@
 package auth
 
 import (
+	"../db"
 	"../tools"
 )
+
+func Init() error {
+
+	tools.Users = make(map[string]tools.User)
+	tools.Admins = make(map[string]tools.User)
+
+	if err := db.LoadUsers(tools.Users); err != nil {
+		return err
+	}
+
+	for login, user := range tools.Users {
+		if user.Admin {
+			tools.Admins[login] = user
+		}
+	}
+
+	return nil
+}
 
 func UserSecret(login, realm string) string {
 
@@ -18,4 +37,13 @@ func AdminSecret(login, realm string) string {
 		return validAdmin.Password
 	}
 	return ""
+}
+
+func UpdateSecret(user tools.User) {
+	tools.Users[user.Login] = user
+	for login, user := range tools.Users {
+		if user.Admin {
+			tools.Admins[login] = user
+		}
+	}
 }

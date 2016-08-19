@@ -14,6 +14,18 @@ import (
 
 func main() {
 
+	tools.InitLog(true)
+
+	if err := db.Init(); err != nil {
+		db.DbConnect.Close()
+		tools.FatalError(err)
+	}
+	defer db.DbConnect.Close()
+
+	if err := localAuth.Init(); err != nil {
+		tools.FatalError(err)
+	}
+	
 	userAuth := auth.NewBasicAuthenticator("Current Authentication", localAuth.UserSecret)
 	adminAuth := auth.NewBasicAuthenticator("Admin Authentication", localAuth.AdminSecret)
 
@@ -28,18 +40,4 @@ func main() {
 	tools.Info("Working")
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
-}
-
-func init() {
-	tools.InitLog(true)
-
-	if err := db.Init(); err != nil {
-		db.DbConnect.Close()
-		tools.FatalError(err)
-	}
-	defer db.DbConnect.Close()
-
-	if err := localAuth.Init(); err != nil {
-		tools.FatalError(err)
-	}
 }

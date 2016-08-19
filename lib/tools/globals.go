@@ -38,11 +38,15 @@ func CheckUser(newUser *User, login, email, pass, rights, addThisUser string) bo
 		return false
 	}
 	
-	if pass == "" && len([]byte(pass)) < miniLenPwd {
+	if pass == "" || len([]byte(pass)) < miniLenPwd {
 		return false
 	}
 	
-	if rights != "user" || rights != "admin" {
+	if rights != "user" && rights != "admin" {
+		return false
+	}
+	
+	if _, ok := Users[login]; ok {
 		return false
 	}
 	

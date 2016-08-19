@@ -6,6 +6,7 @@ import (
 	"github.com/abbot/go-http-auth"
 	"net/http"
 	"../../db"
+	locAuth "../../auth"
 )
 
 func Add(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
@@ -41,17 +42,17 @@ func Add(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	
 	if ok := tools.CheckUser(&newUser, login, email, pass, rights, addThisUser); !ok {
 		info.Error = true
-		tools.Error(ok)
 		tmpl.TemplateMe(w, r, "lib/templates/admin/users/add.html", info)
 		return
 	}
 	
 	if err := db.AddUser(newUser); err != nil {
-		tools.Error(err)
 		info.Error = true
 		tmpl.TemplateMe(w, r, "lib/templates/admin/users/add.html", info)
 		return
 	}
+	
+	locAuth.UpdateSecret(newUser)
 	
 	info.User = newUser
 	info.Added = true
