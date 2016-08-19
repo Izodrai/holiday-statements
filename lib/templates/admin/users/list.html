@@ -27,15 +27,13 @@
 				<td style="border-style:solid;border-width:0px 0px 2px 0px">Email</td>
 				<td style="border-style:solid;border-width:0px 0px 2px 0px">Admin</td>
 				<td style="border-style:solid;border-width:0px 0px 2px 0px">Update</td>
-				<td style="border-style:solid;border-width:0px 0px 2px 0px">Delete</td>
 			</tr>
 			{{- range .Users }}
 			<tr>
 				<td>{{ .Login }}</td>
 				<td>{{ .Email }}</td>
 				<td>{{ .Admin }}</td>
-				<td>Update</td>
-				<td>Delete</td>
+				<td><!--<a href="/users?update={{ .Login }}">-->update<!--</a>--></td>
 			</tr>
 			{{- end}}
 		<table>
@@ -49,15 +47,13 @@
 				<td style="border-style:solid;border-width:0px 0px 2px 0px">Email</td>
 				<td style="border-style:solid;border-width:0px 0px 2px 0px">Admin</td>
 				<td style="border-style:solid;border-width:0px 0px 2px 0px">Update</td>
-				<td style="border-style:solid;border-width:0px 0px 2px 0px">Delete</td>
 			</tr>
 			{{- range .Admins }}
 			<tr>
 				<td>{{ .Login }}</td>
 				<td>{{ .Email }}</td>
 				<td>{{ .Admin }}</td>
-				<td>Update</td>
-				<td>Delete</td>
+				<td><!--<a href="/users?update={{ .Login }}">-->update<!--</a>--></td>
 			</tr>
 			{{- end}}
 		<table>
