@@ -1,24 +1,13 @@
 package db
 
 import (
-// 	"database/sql"
+	"..//tools"
 )
 
-func AddUser() error {
-	
-	var err error
-	var rows *sql.Rows
-	
-	rows, err = DbConnect.Query("select login, email, rights from users")
+func AddUser(newUser tools.User) error {
+	_, err := DbConnect.Exec("INSERT INTO users( login, pwd, email, rights) VALUES (?,?,?,?)", newUser.Login, newUser.Password, newUser.Email, newUser.Admin)
 	if err != nil {
 		return err
 	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var user tool.User
-		rows.Scan(&user.Login, &user.Email, &user.Admin)
-	}
-
 	return nil
 }

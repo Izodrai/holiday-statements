@@ -18,6 +18,8 @@ func Add(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	rights := r.PostFormValue("rights")
 	addThisUser := r.PostFormValue("addThisUser")
 	
+	var newUser tools.User
+	
 	info := struct {
 		Title string
 		Nav   []string
@@ -32,15 +34,20 @@ func Add(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Error : false,
 	}
 	
-	var newUser tools.User
-	
-	if ok := CheckUser(&newUser, login, email, pass, rights, addThisUser); !ok {
-		info.Error = true
+	if addThisUser == "" {
 		tmpl.TemplateMe(w, r, "lib/templates/admin/users/add.html", info)
 		return
 	}
 	
-	if ok := db.AddUser(&newUser); !ok {
+	if ok := tools.CheckUser(&newUser, login, email, pass, rights, addThisUser); !ok {
+		info.Error = true
+		tools.Error(ok)
+		tmpl.TemplateMe(w, r, "lib/templates/admin/users/add.html", info)
+		return
+	}
+	
+	if err := db.AddUser(newUser); err != nil {
+		tools.Error(err)
 		info.Error = true
 		tmpl.TemplateMe(w, r, "lib/templates/admin/users/add.html", info)
 		return
@@ -49,42 +56,6 @@ func Add(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	info.User = newUser
 	info.Added = true
 	
-
 	tmpl.TemplateMe(w, r, "lib/templates/admin/users/add.html", info)
 }
 
-const miniLenPwd = 4
-
-func CheckUser(newUser *tools.User, login, email, pass, rights, addThisUser string) bool {
-	
-	if addThisUser != "ok" {
-		return false
-	}
-	
-	if login == "" {
-		return false
-	}
-	
-	if email == "" {
-		return false
-	}
-	
-	if pass == "" && len([]byte(pass)) < miniLenPwd {
-		return false
-	}
-	
-	if rights != "user" || rights != "admin" {
-		return false
-	}
-	
-	newUser.Login = login
-	newUser.Email = email
-	newUser.Password = pass
-	
-	if rights == "admin" {
-		newUser.Admin = true
-	} else {
-		newUser.Admin = false
-	}
-	return true
-}
