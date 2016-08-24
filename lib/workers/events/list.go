@@ -17,7 +17,7 @@ func List(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Nav          []string
 		Events  []tools.Event
 	}{
-		Title: "list events",
+		Title: "liste des évènements",
 		Nav: tools.GenerateNav(r.Username),
 		Events: []tools.Event{},
 	}
@@ -25,7 +25,7 @@ func List(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	user, _ = tools.Users[r.Username]
 	if err := db.LoadEventsForThisUser(&user, &info.Events); err != nil {
 		tools.Error(err)
-		tmpl.TemplateMe(w, r, "lib/templates/events/list.html", info)
+		tmpl.Template500(w, r)
 		return
 	}
 	

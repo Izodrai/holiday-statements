@@ -78,13 +78,15 @@ VALUES
 INSERT INTO events (id, reference, created_at, promoter_id)
 VALUES 
 	(1,"holidays in Barcelona !", 1440414793, 1),
-	(2,"picnic at user2", 1472062820, 1);
+	(2,"picnic at user2", 1472062820, 1),
+	(3,"camping paradise", 1472070142, 2);
 	
 INSERT INTO participants (user_id, event_id)
 VALUES
 	(1,1),
 	(2,1),
-	(1,2);
+	(1,2),
+	(2,3);
 	
 INSERT INTO spending_type (id, reference)
 VALUES 

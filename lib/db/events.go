@@ -49,3 +49,15 @@ func LoadEventsForThisUser(user *tools.User, evs *[]tools.Event) error {
 	
 	return nil
 }
+
+
+func CheckEventForThisUser(user *tools.User, evId int) (bool,error) {
+
+	var ok bool
+	
+	err := DbConnect.QueryRow(`select count(0) from participants where user_id = ? and event_id = ?`, user.Id, evId).Scan(&ok)
+	if err != nil {
+		return false, err
+	}
+	return ok, nil
+}
