@@ -56,6 +56,17 @@ CREATE TABLE spending_for (
     FOREIGN KEY(debtor_id) REFERENCES users(id)
 );
 
+CREATE TABLE debts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    debtor_id INTEGER,
+    creditor_id INTEGER,
+    event_id INTEGER,
+    amount REAL,
+    paid INTEGER,
+    FOREIGN KEY(debtor_id) REFERENCES users(id)
+    FOREIGN KEY(creditor_id) REFERENCES users(id)
+    FOREIGN KEY(event_id) REFERENCES events(id),
+);
 
 INSERT INTO users(login, pwd, email, rights) 
 values
