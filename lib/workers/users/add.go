@@ -46,7 +46,7 @@ func Add(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		return
 	}
 	
-	if err := db.AddUser(newUser); err != nil {
+	if err := db.AddUser(&newUser); err != nil {
 		info.Error = true
 		tmpl.TemplateMe(w, r, "lib/templates/admin/users/add.html", info)
 		return

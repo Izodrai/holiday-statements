@@ -7,10 +7,18 @@ var Users map[string]User
 var Admins map[string]User
 
 type User struct {
+	Id       int64
 	Login    string
 	Password string
 	Email    string
 	Admin    bool
+}
+
+type Event struct {
+	Id int64
+	Reference string
+	CreatedAt int64
+	PromoterId int64
 }
 
 func (u *User) GeneratePwd() error {

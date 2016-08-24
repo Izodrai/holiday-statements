@@ -1,29 +1,20 @@
 package events
 
 import (
-	tmpl "../../templates"
-	"../../tools"
 	"github.com/abbot/go-http-auth"
 	"net/http"
+	
+	evs "../../workers/events"
 )
 
 func HandleEvents(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 
-	nav := tools.GenerateNav(r.Username)
+	params := r.URL.Query()
 	
-	info := struct {
-		Title        string
-		Nav          []string
-		Participants []string
-	}{
-		Title: "events",
-		Nav: nav,
-		Participants: []string{
-			"Valentin",
-			"Emma",
-			"Justine",
-		},
+	if _, ok := params["get"]; ok {
+		evs.Get(w,r)
+		return 
 	}
-
-	tmpl.TemplateMe(w, r, "lib/templates/events/events.html", info)
+	
+	evs.List(w,r)
 }

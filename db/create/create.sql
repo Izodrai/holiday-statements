@@ -63,12 +63,35 @@ CREATE TABLE debts (
     event_id INTEGER,
     amount REAL,
     paid INTEGER,
-    FOREIGN KEY(debtor_id) REFERENCES users(id)
-    FOREIGN KEY(creditor_id) REFERENCES users(id)
-    FOREIGN KEY(event_id) REFERENCES events(id),
+    FOREIGN KEY(debtor_id) REFERENCES users(id),
+    FOREIGN KEY(creditor_id) REFERENCES users(id),
+    FOREIGN KEY(event_id) REFERENCES events(id)
 );
 
-INSERT INTO users(login, pwd, email, rights) 
-values
-	("admin", "$2y$10$lsliCJPCiCsPOrgTgidDrumYuTwg3MGW6CQIy4nn7ziu8OXNiHbpO", "admin@mydomain.country", 1),
-	("user1", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users1@mydomain.country", 0);
+
+
+INSERT INTO users (id, login, pwd, email, rights) 
+VALUES
+	(1, "admin", "$2y$10$lsliCJPCiCsPOrgTgidDrumYuTwg3MGW6CQIy4nn7ziu8OXNiHbpO", "admin@mydomain.country", 1),
+	(2, "user1", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users1@mydomain.country", 0);
+	
+INSERT INTO events (id, reference, created_at, promoter_id)
+VALUES 
+	(1,"holidays in Barcelona !", 1472038901, 1),
+	(2,"picnic at user2", 1440416501, 1);
+	
+INSERT INTO participants (user_id, event_id)
+VALUES
+	(1,1),
+	(2,1),
+	(1,2);
+	
+INSERT INTO spending_type (id, reference)
+VALUES 
+	(1, "food"),
+	(2, "accommodation");
+	
+INSERT INTO spending (id, event_id, type_id, description, amount, spending_at, created_at, payer_id)
+VALUES 
+	(1, 1, 1, "bear", 12.35, 1440416501, 1440416502, 1),
+	(2, 1, 2, "camping", 350.10, 1440436501, 1440436502, 1);
