@@ -31,7 +31,7 @@ func main() {
 
 	http.HandleFunc("/", index.HandleDefault)
 
-	http.HandleFunc("/index", userAuth.Wrap(index.HandleIndex))
+// 	http.HandleFunc("/index", userAuth.Wrap(index.HandleIndex))
 
 	http.HandleFunc("/events", userAuth.Wrap(events.HandleEvents))
 

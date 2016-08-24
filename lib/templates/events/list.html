@@ -14,21 +14,26 @@
 			<li><a href="{{ . }}">{{ . }}</a></li>
 			{{end}}
 		</ul>
-		<ul>
-			<li><a href="/events?get">event test</a></li>
-		</ul>
 	</nav>
 	
-	
-	<table style="border-style:solid">
-		<tr>
-			<td style="border-style:solid;border-width:0px 0px 2px 0px">Date</td>
-			<td style="border-style:solid;border-width:0px 0px 2px 0px">Montant</td>
-			<td style="border-style:solid;border-width:0px 0px 2px 0px">Payeur</td>
-			{{range .Participants}}
-			<td style="border-style:solid;border-width:0px 0px 2px 0px">{{ . }}</td>
-			{{end}}
-		</tr>
-	</table>
+	{{if .Events -}}
+		<table style="border-style:solid">
+			<caption>Liste de mes évènements</caption>
+			<tr>
+				<td style="border-style:solid;border-width:0px 0px 2px 0px">Nom</td>
+				<td style="border-style:solid;border-width:0px 0px 2px 0px">Créé le</td>
+				<td style="border-style:solid;border-width:0px 0px 2px 0px">Par</td>
+				<td style="border-style:solid;border-width:0px 0px 2px 0px">Afficher</td>
+			</tr>
+			{{- range .Events }}
+			<tr>
+				<td>{{ .Reference }}</td>
+				<td>{{ .CreatedAt.TimeString }}</td>
+				<td>{{ .PromoterName }}</td>
+				<td><a href="/events?get={{ .Id }}">afficher</a></td>
+			</tr>
+			{{- end}}
+		<table>
+	{{- end}}
 </body>
 </html>

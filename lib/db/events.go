@@ -29,7 +29,7 @@ func LoadEventsForThisUser(user *tools.User, evs *[]tools.Event) error {
 		evsId = append(evsId, id)
 	}
 	
-	rows, err = DbConnect.Query(`select id, reference, created_at, promoter_id from events where id IN (`+strings.Join(evsId, ",")+`)`)
+	rows, err = DbConnect.Query(`select id, reference, created_at, promoter_id from events where id IN (`+strings.Join(evsId, ",")+`) order by id desc`)
 	if err != nil {
 		return err
 	}
@@ -39,10 +39,11 @@ func LoadEventsForThisUser(user *tools.User, evs *[]tools.Event) error {
 
 		var ev tools.Event
 
-		err = rows.Scan(&ev.Id, &ev.Reference, &ev.CreatedAt, &ev.PromoterId)
+		err = rows.Scan(&ev.Id, &ev.Reference, &ev.CreatedAt.TimeStamp, &ev.PromoterId)
 		if err != nil {
 			return err
 		}
+		ev.Feed()
 		*evs = append(*evs, ev)
 	}
 	
