@@ -97,6 +97,30 @@ func LoadThisEvent(ev *tools.Event) error {
 		ev.Feed()
 	}
 	
+	// Load Participants
+	
+	rows, err = DbConnect.Query(`
+				select 
+					user_id
+				from 
+					participants
+				where 
+					event_id = ?`, ev.Id)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	
+	for rows.Next() {
+		var u tools.User
+		err = rows.Scan(&u.Id)
+		if err != nil {
+			return err
+		}
+		u, _ = tools.UsersId[u.Id]
+		ev.Participants = append(ev.Participants, u)
+	}
+	
 	// Load spendings
 	
 	rows, err = DbConnect.Query(`
@@ -123,12 +147,12 @@ func LoadThisEvent(ev *tools.Event) error {
 		if err != nil {
 			return err
 		}
-		ev.Spendings = append(ev.Spendings, s)
+		ev.Spending = append(ev.Spending, s)
 	}
 	
 // 	tools.Info(ev.Id)
 	
-	for i, s := range ev.Spendings {
+	for i, s := range ev.Spending {
 		
 		rows, err = DbConnect.Query(`
 				select 
@@ -150,9 +174,11 @@ func LoadThisEvent(ev *tools.Event) error {
 			}
 			s.For = append(s.For, sf)
 		}
-		ev.Spendings[i]=s
+		s.Feed(ev.Participants)
+		ev.Spending[i]=s
 		
-// 		tools.Info(ev.Spendings[i])
+		tools.Info(ev.Spending[i])
 	}
+	
 	return nil
 }

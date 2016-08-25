@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"../../db"
+	"time"
 )
 
 func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
@@ -16,19 +17,21 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Title        string
 		Nav          []string
 		Actualize    int64
+		Event tools.Event
+		Date string
 	}{
 		Title: "évènement",
 		Nav: tools.GenerateNav(r.Username),
 		Actualize: 0,
+                Event: tools.Event{},
+		Date: time.Now().Format("2006-01-02"),
 	}
 	
 	params := r.URL.Query()
 	
 	p, _ := params["get"]
 	
-	var ev tools.Event
-	
-	ev.Id, err = strconv.ParseInt(p[0],10,64)
+	info.Event.Id, err = strconv.ParseInt(p[0],10,64)
 	if err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
@@ -37,7 +40,7 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	
 	user, _ := tools.Users[r.Username]
 	
-	ok, err := db.CheckEventForThisUser(&user, &ev)
+	ok, err := db.CheckEventForThisUser(&user, &info.Event)
 	if err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
@@ -49,14 +52,14 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		return
 	}
 	
-	if err = db.LoadThisEvent(&ev); err != nil {
+	if err = db.LoadThisEvent(&info.Event); err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
 		return
 	}
 	
-	info.Title = ev.Reference
-	info.Actualize = ev.Id
+	info.Title = info.Event.Reference
+	info.Actualize = info.Event.Id
 	
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
 }

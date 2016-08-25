@@ -2,6 +2,7 @@ package tools
 
 import (
 	"time"
+	"strconv"
 )
 
 type Event struct {
@@ -10,7 +11,8 @@ type Event struct {
 	CreatedAt EventTime
 	PromoterId int64
 	PromoterName string
-	Spendings []Spending
+	Participants []User
+	Spending []Spending
 }
 
 type EventTime struct {
@@ -37,6 +39,16 @@ type Spending struct {
 	PayerId int64
 	PayerName string
 	For []SpendingFor
+	Rows RowToDisplay
+}
+
+type RowToDisplay struct {
+	Date string
+	Amount float64
+	PayerName string
+	Debts []string
+	TypeSpending string
+	Description string
 }
 
 type SpendingFor struct {
@@ -45,7 +57,7 @@ type SpendingFor struct {
 	Debt float64
 }
 
-func (s *Spending) Feed() {
+func (s *Spending) Feed(participants []User) {
 	s.SpendingAt.TimeStruct = time.Unix(0, s.SpendingAt.TimeStamp*int64(time.Second))
 	s.SpendingAt.TimeString = s.SpendingAt.TimeStruct.Format("2006-01-02 15:04:05")
 	s.CreatedAt.TimeStruct = time.Unix(0, s.CreatedAt.TimeStamp*int64(time.Second))
@@ -57,4 +69,21 @@ func (s *Spending) Feed() {
 		sf.DebtorName = debtor.Login
 		s.For[i]=sf
 	}
+	
+	s.Rows.Date = s.SpendingAt.TimeString
+	s.Rows.Amount = s.Amount
+	s.Rows.PayerName = s.PayerName
+	
+	for i, user := range participants {
+		s.Rows.Debts = append(s.Rows.Debts, "")
+		for _, sf := range s.For {
+			if sf.DebtorName == user.Login {
+				s.Rows.Debts[i]=strconv.FormatFloat(sf.Debt,'f',2,64)
+				break
+			}
+		}
+	}
+	
+	s.Rows.TypeSpending = s.TypeReference
+	s.Rows.Description = s.Description
 }

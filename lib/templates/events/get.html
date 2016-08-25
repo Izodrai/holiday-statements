@@ -20,16 +20,71 @@
 		</ul>
 	</nav>
 	
+	{{if .Event -}}
+	<table style="border-style:solid">
+		<form name="inscription" method="post" action="/events?get={{.Actualize}}">
+			<tr>
+				<td>montant :</td>
+				<td><input type="text" name="montant"/></td>
+			</tr>
+			<tr>
+				<td>date de la dépense :</td>
+				<td><input type="text" name="date" value="{{ .Date }}"/></td>
+			</tr>
+			<tr>
+				<td>qui a payé ? :</td>
+				<td>
+					{{- range .Event.Participants }}
+					<input type="radio" name="payer" value="{{.Id}}"/><label for="payer">{{.Login}}</label><br/>
+					{{- end}}
+				</td>
+			<tr>
+			</tr>
+				<td>pour qui ? :</td>
+				<td>
+					<input type="checkbox" name="allPaid" id="allPaid" /><label for="allPaid">all</label><br/>
+					{{- range .Event.Participants }}
+					<input type="checkbox" name="{{.Id}}Paid" id="{{.Id}}Paid" /><label for="{{.Id}}Paid">{{.Login}}</label><br/>
+					{{- end}}
+				</td>
+			</tr>
+			<tr>
+				<td>description :</td>
+				<td><textarea type="text" name="description" id="description"></textarea></td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" name="valider" value="OK"/></td>
+			</tr>
+		</form>
+	</table>
+	
+	<h3>Vos dernières dépenses :</h3>
 	
 	<table style="border-style:solid">
 		<tr>
-			<td style="border-style:solid;border-width:0px 0px 2px 0px">Date</td>
-			<td style="border-style:solid;border-width:0px 0px 2px 0px">Montant</td>
-			<td style="border-style:solid;border-width:0px 0px 2px 0px">Payeur</td>
-			{{range .Participants}}
-			<td style="border-style:solid;border-width:0px 0px 2px 0px">{{ . }}</td>
-			{{end}}
+			<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Date</td>
+			<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Montant</td>
+			<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Payeur</td>
+			{{- range .Event.Participants }}
+			<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">{{.Login}}</td>
+			{{- end}}
+			<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Type de dépense</td>
+			<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Description</td>
 		</tr>
+		
+		{{- range .Event.Spending }}
+		<tr>
+			<td padding="0.5px">{{.Rows.Date}}</td>
+			<td padding="0.5px">{{.Rows.Amount}}</td>
+			<td padding="0.5px">{{.Rows.PayerName}}</td>
+			{{- range .Rows.Debts }}
+				<td padding="0.5px">{{.}}</td>
+			{{- end}}
+			<td padding="0.5px">{{.Rows.TypeSpending}}</td>
+			<td padding="0.5px">{{.Rows.Description}}</td>
+		</tr>
+		{{- end}}
 	</table>
+	{{- end}}
 </body>
 </html>
