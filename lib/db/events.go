@@ -51,13 +51,35 @@ func LoadEventsForThisUser(user *tools.User, evs *[]tools.Event) error {
 }
 
 
-func CheckEventForThisUser(user *tools.User, evId int) (bool,error) {
+func CheckEventForThisUser(user *tools.User, ev *tools.Event) (bool,error) {
 
 	var ok bool
 	
-	err := DbConnect.QueryRow(`select count(0) from participants where user_id = ? and event_id = ?`, user.Id, evId).Scan(&ok)
+	err := DbConnect.QueryRow(`select count(0) from participants where user_id = ? and event_id = ?`, user.Id, ev.Id).Scan(&ok)
 	if err != nil {
 		return false, err
 	}
 	return ok, nil
+}
+
+func LoadThisEvent(ev *tools.Event) error {
+
+	var err error
+	var rows *sql.Rows
+	
+	rows, err = DbConnect.Query(`select id, reference, created_at, promoter_id from events where id = ?`, ev.Id)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&ev.Id, &ev.Reference, &ev.CreatedAt.TimeStamp, &ev.PromoterId)
+		if err != nil {
+			return err
+		}
+		ev.Feed()
+	}
+	
+	return nil
 }

@@ -17,7 +17,7 @@ func List(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Nav          []string
 		Events  []tools.Event
 	}{
-		Title: "liste des évènements",
+		Title: "mes évènements",
 		Nav: tools.GenerateNav(r.Username),
 		Events: []tools.Event{},
 	}

@@ -11,6 +11,7 @@ import (
 
 func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 
+	var err error
 	info := struct {
 		Title        string
 		Nav          []string
@@ -23,17 +24,18 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	
 	p, _ := params["get"]
 	
-	evId, err := strconv.Atoi(p[0])
+	var ev tools.Event
+	
+	ev.Id, err = strconv.ParseInt(p[0],10,64)
 	if err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
 		return
 	}
-	tools.Info(evId)
 	
 	user, _ := tools.Users[r.Username]
 	
-	ok, err := db.CheckEventForThisUser(&user, evId)
+	ok, err := db.CheckEventForThisUser(&user, &ev)
 	if err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
@@ -44,6 +46,14 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		http.Redirect(w, &r.Request, "/events", http.StatusForbidden)
 		return
 	}
+	
+	if err = db.LoadThisEvent(&ev); err != nil {
+		tools.Error(err)
+		tmpl.Template500(w, r)
+		return
+	}
+	
+	info.Title = ev.Reference
 	
 
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
