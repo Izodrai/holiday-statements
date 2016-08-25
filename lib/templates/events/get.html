@@ -11,11 +11,12 @@
 	<nav>
 		<ul>
 			{{range .Nav}}
-			<li><a href="{{ . }}">{{ . }}</a></li>
+			<li><a href="{{ . }}"><input type="button" value="{{ . }}"></a></li>
 			{{end}}
 		</ul>
 		<ul>
-			<li><a href="/events">back to list</a></li>
+			<li><a href="/events"><input type="button" value="Retour à mes évènements"></a></li>
+			<li><a href="/events?get={{.Actualize}}"><input type="button" value="Actualiser"></a></li>
 		</ul>
 	</nav>
 	

@@ -15,9 +15,11 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	info := struct {
 		Title        string
 		Nav          []string
+		Actualize    int64
 	}{
 		Title: "évènement",
 		Nav: tools.GenerateNav(r.Username),
+		Actualize: 0,
 	}
 	
 	params := r.URL.Query()
@@ -54,6 +56,7 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	}
 	
 	info.Title = ev.Reference
+	info.Actualize = ev.Id
 	
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
 }

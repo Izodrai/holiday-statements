@@ -11,7 +11,7 @@
 	<nav>
 		<ul>
 			{{range .Nav}}
-			<li><a href="{{ . }}">{{ . }}</a></li>
+			<li><a href="{{ . }}"><input type="button" value="{{ . }}"></a></li>
 			{{end}}
 		</ul>
 	</nav>
@@ -30,7 +30,7 @@
 				<td>{{ .Reference }}</td>
 				<td>{{ .CreatedAt.TimeString }}</td>
 				<td>{{ .PromoterName }}</td>
-				<td><a href="/events?get={{ .Id }}">afficher</a></td>
+				<td><a href="/events?get={{ .Id }}"><input type="button" value="Afficher"></a></td>
 			</tr>
 			{{- end}}
 		<table>
