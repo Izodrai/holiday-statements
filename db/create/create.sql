@@ -52,6 +52,7 @@ CREATE TABLE spending (
 CREATE TABLE spending_for (
     spending_id INTEGER,
     debtor_id INTEGER,
+    debt REAL,
     FOREIGN KEY(spending_id) REFERENCES spending(id),
     FOREIGN KEY(debtor_id) REFERENCES users(id)
 );
@@ -97,3 +98,10 @@ INSERT INTO spending (id, event_id, type_id, description, amount, spending_at, c
 VALUES 
 	(1, 1, 1, "bear", 12.35, 1440416501, 1440416502, 1),
 	(2, 1, 2, "camping", 350.10, 1440436501, 1440436502, 1);
+	
+INSERT INTO spending_for (spending_id, debtor_id, debt)
+VALUES 
+	(1, 1, 6.175),
+	(1, 2, 6.175),
+	(2, 1, 175.05),
+	(2, 2, 175.05);

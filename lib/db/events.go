@@ -55,7 +55,15 @@ func CheckEventForThisUser(user *tools.User, ev *tools.Event) (bool,error) {
 
 	var ok bool
 	
-	err := DbConnect.QueryRow(`select count(0) from participants where user_id = ? and event_id = ?`, user.Id, ev.Id).Scan(&ok)
+	err := DbConnect.QueryRow(`
+				select 
+					count(0) 
+				from 
+					participants 
+				where 
+					user_id = ? 
+				and 
+					event_id = ?`, user.Id, ev.Id).Scan(&ok)
 	if err != nil {
 		return false, err
 	}
@@ -63,11 +71,19 @@ func CheckEventForThisUser(user *tools.User, ev *tools.Event) (bool,error) {
 }
 
 func LoadThisEvent(ev *tools.Event) error {
-
+	
 	var err error
 	var rows *sql.Rows
 	
-	rows, err = DbConnect.Query(`select id, reference, created_at, promoter_id from events where id = ?`, ev.Id)
+	// Load event
+	
+	rows, err = DbConnect.Query(`
+				select 
+					id, reference, created_at, promoter_id 
+				from 
+					events
+				where 
+					id = ?`, ev.Id)
 	if err != nil {
 		return err
 	}
@@ -81,5 +97,62 @@ func LoadThisEvent(ev *tools.Event) error {
 		ev.Feed()
 	}
 	
+	// Load spendings
+	
+	rows, err = DbConnect.Query(`
+				select 
+					s.id, s.type_id, st.reference, s.description, s.amount, s.spending_at, s.created_at, s.payer_id 
+				from 
+					spending as s
+				join
+					spending_type as st
+				on
+					st.id = s.type_id
+				where 
+					s.event_id = ?
+				order by 
+					s.spending_at desc`, ev.Id)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	
+	for rows.Next() {
+		var s tools.Spending
+		err = rows.Scan(&s.Id, &s.TypeId, &s.TypeReference, &s.Description, &s.Amount, &s.SpendingAt.TimeStamp, &s.CreatedAt.TimeStamp, &s.PayerId)
+		if err != nil {
+			return err
+		}
+		ev.Spendings = append(ev.Spendings, s)
+	}
+	
+// 	tools.Info(ev.Id)
+	
+	for i, s := range ev.Spendings {
+		
+		rows, err = DbConnect.Query(`
+				select 
+					debtor_id, debt 
+				from 
+					spending_for
+				where 
+					spending_id = ?`, s.Id)
+		if err != nil {
+			return err
+		}
+		defer rows.Close()
+		
+		for rows.Next() {
+			var sf tools.SpendingFor
+			err = rows.Scan(&sf.DebtorId, &sf.Debt)
+			if err != nil {
+				return err
+			}
+			s.For = append(s.For, sf)
+		}
+		ev.Spendings[i]=s
+		
+// 		tools.Info(ev.Spendings[i])
+	}
 	return nil
 }

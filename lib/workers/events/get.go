@@ -55,6 +55,5 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	
 	info.Title = ev.Reference
 	
-
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
 }
