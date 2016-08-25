@@ -19,12 +19,14 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Actualize    int64
 		Event tools.Event
 		Date string
+		TypeSpending []string
 	}{
 		Title: "évènement",
 		Nav: tools.GenerateNav(r.Username),
 		Actualize: 0,
                 Event: tools.Event{},
 		Date: time.Now().Format("2006-01-02"),
+		TypeSpending: []string{},
 	}
 	
 	params := r.URL.Query()
@@ -53,6 +55,12 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	}
 	
 	if err = db.LoadThisEvent(&info.Event); err != nil {
+		tools.Error(err)
+		tmpl.Template500(w, r)
+		return
+	}
+	
+	if err = db.LoadTypeSpending(&info.TypeSpending); err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
 		return

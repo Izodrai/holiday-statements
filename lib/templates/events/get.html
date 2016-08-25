@@ -29,7 +29,8 @@
 			</tr>
 			<tr>
 				<td>date de la dépense :</td>
-				<td><input type="text" name="date" value="{{ .Date }}"/></td>
+				<td><input type="date" name="date" value="{{ .Date }}"/></td>
+<!-- 				<td><input type="text" name="date" value="{{ .Date }}"/></td> -->
 			</tr>
 			<tr>
 				<td>qui a payé ? :</td>
@@ -53,8 +54,19 @@
 				<td><textarea type="text" name="description" id="description"></textarea></td>
 			</tr>
 			<tr>
+				<td>Type de la dépense :</td>
+				<td>
+				<select name="TypeSpending" id="TypeSpending">
+					{{- range .Event.TypeSpending }}
+						<option value="{{.}}">{{.}}</option>
+					{{- end}}
+				</select>
+				</td>
+			</tr>
+			<tr>
 				<td colspan="2"><input type="submit" name="valider" value="OK"/></td>
 			</tr>
+
 		</form>
 	</table>
 	

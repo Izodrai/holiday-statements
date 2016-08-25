@@ -50,6 +50,34 @@ func LoadEventsForThisUser(user *tools.User, evs *[]tools.Event) error {
 	return nil
 }
 
+func LoadTypeSpending(ts *[]string) error {
+	
+	var err error
+	var rows *sql.Rows
+	
+	// Load event
+	
+	rows, err = DbConnect.Query(`
+				select 
+					reference 
+				from 
+					spending_type`)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var reference string
+		err = rows.Scan(&reference)
+		if err != nil {
+			return err
+		}
+		*ts = append(*ts, reference)
+	}
+	
+	return nil
+}
 
 func CheckEventForThisUser(user *tools.User, ev *tools.Event) (bool,error) {
 

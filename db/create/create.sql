@@ -96,7 +96,7 @@ VALUES
 	
 INSERT INTO spending (id, event_id, type_id, description, amount, spending_at, created_at, payer_id)
 VALUES 
-	(1, 1, 1, "bear", 12.35, 1440416501, 1440416502, 1),
+	(1, 1, 1, "beers", 12.35, 1440416501, 1440416502, 1),
 	(2, 1, 2, "camping", 350.10, 1440436501, 1440436502, 1);
 	
 INSERT INTO spending_for (spending_id, debtor_id, debt)
