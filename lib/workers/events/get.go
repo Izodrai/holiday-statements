@@ -20,6 +20,8 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Event tools.Event
 		Date string
 		TypeSpending []tools.SpendingType
+		Added bool
+		Error bool
 	}{
 		Title: "évènement",
 		Nav: tools.GenerateNav(r.Username),
@@ -27,6 +29,8 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
                 Event: tools.Event{},
 		Date: time.Now().Format("2006-01-02"),
 		TypeSpending: []tools.SpendingType{},
+		Added: false,
+		Error: false,
 	}
 	
 	params := r.URL.Query()
