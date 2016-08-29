@@ -28,6 +28,10 @@ func (e *Event) Feed() {
 	e.PromoterName = promoter.Login
 }
 
+type SpendingType struct {
+	Id int64
+	Reference string
+}
 type Spending struct {
 	Id int64
 	TypeId int64

@@ -57,8 +57,8 @@
 				<td>Type de la dépense :</td>
 				<td>
 				<select name="TypeSpending" id="TypeSpending">
-					{{- range .Event.TypeSpending }}
-						<option value="{{.}}">{{.}}</option>
+					{{- range .TypeSpending }}
+						<option value="{{.Id}}">{{.Reference}}</option>
 					{{- end}}
 				</select>
 				</td>

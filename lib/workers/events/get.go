@@ -19,14 +19,14 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Actualize    int64
 		Event tools.Event
 		Date string
-		TypeSpending []string
+		TypeSpending []tools.SpendingType
 	}{
 		Title: "évènement",
 		Nav: tools.GenerateNav(r.Username),
 		Actualize: 0,
                 Event: tools.Event{},
 		Date: time.Now().Format("2006-01-02"),
-		TypeSpending: []string{},
+		TypeSpending: []tools.SpendingType{},
 	}
 	
 	params := r.URL.Query()
@@ -53,6 +53,8 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		http.Redirect(w, &r.Request, "/events", http.StatusForbidden)
 		return
 	}
+	
+	//TODO add events if exist
 	
 	if err = db.LoadThisEvent(&info.Event); err != nil {
 		tools.Error(err)
