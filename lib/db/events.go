@@ -50,7 +50,7 @@ func LoadEventsForThisUser(user *tools.User, evs *[]tools.Event) error {
 	return nil
 }
 
-func LoadTypeSpending(tst *[]tools.SpendingType) error {
+func LoadSpendingType(tst *[]tools.SpendingType, spendingTypes map[int64]string) error {
 	
 	var err error
 	var rows *sql.Rows
@@ -74,6 +74,7 @@ func LoadTypeSpending(tst *[]tools.SpendingType) error {
 			return err
 		}
 		*tst = append(*tst, st)
+		spendingTypes[st.Id]=st.Reference
 	}
 	
 	return nil

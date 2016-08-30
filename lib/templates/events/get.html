@@ -32,7 +32,7 @@
 			<form name="inscription" method="post" action="/events?get={{.Actualize}}">
 				<tr>
 					<td>montant :</td>
-					<td><input type="text" name="montant"/></td>
+					<td><input type="text" name="amount"/></td>
 				</tr>
 				<tr>
 					<td>date de la dépense :</td>
@@ -50,28 +50,28 @@
 				</tr>
 					<td>pour qui ? :</td>
 					<td>
-						<input type="checkbox" name="allPaid" id="allPaid" /><label for="allPaid">all</label><br/>
+						<input type="checkbox" id="allPaid" /><label for="allPaid">all</label><br/>
 						{{- range .Event.Participants }}
-						<input type="checkbox" name="{{.Id}}Paid" id="{{.Id}}Paid" /><label for="{{.Id}}Paid">{{.Login}}</label><br/>
+						<input type="checkbox" id="{{.Id}}-Paid" /><label for="{{.Id}}-Paid">{{.Login}}</label><br/>
 						{{- end}}
 					</td>
 				</tr>
 				<tr>
 					<td>description :</td>
-					<td><textarea type="text" name="description" id="description"></textarea></td>
+					<td><textarea type="text" name="desc" id="desc"></textarea></td>
 				</tr>
 				<tr>
 					<td>Type de la dépense :</td>
 					<td>
-					<select name="TypeSpending" id="TypeSpending">
-						{{- range .TypeSpending }}
+					<select id="spdType">
+						{{- range .SpendingTypes }}
 							<option value="{{.Id}}">{{.Reference}}</option>
 						{{- end}}
 					</select>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="submit" name="valider" value="OK"/></td>
+					<td colspan="2"><input type="submit" name="addSpd" value="Ajouter"/></td>
 				</tr>
 
 			</form>
