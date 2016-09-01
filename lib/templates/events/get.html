@@ -50,9 +50,9 @@
 				</tr>
 					<td>pour qui ? :</td>
 					<td>
-						<input type="checkbox" id="allPaid" /><label for="allPaid">all</label><br/>
+						<input type="checkbox" name="allPaid" /><label for="allPaid">all</label><br/>
 						{{- range .Event.Participants }}
-						<input type="checkbox" id="{{.Id}}-Paid" /><label for="{{.Id}}-Paid">{{.Login}}</label><br/>
+						<input type="checkbox" name="{{.Id}}-Paid" /><label for="{{.Id}}-Paid">{{.Login}}</label><br/>
 						{{- end}}
 					</td>
 				</tr>
@@ -63,7 +63,7 @@
 				<tr>
 					<td>Type de la dépense :</td>
 					<td>
-					<select id="spdType">
+					<select name="spdType">
 						{{- range .SpendingTypes }}
 							<option value="{{.Id}}">{{.Reference}}</option>
 						{{- end}}

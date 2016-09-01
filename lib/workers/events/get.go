@@ -70,13 +70,13 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		return
 	}
 	
-	if info.Added, err = addSpending(r, &info.Event, &info.SpendingTypes); err != nil {
+	if err = db.LoadThisEvent(&info.Event); err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
 		return
 	}
 	
-	if err = db.LoadThisEvent(&info.Event); err != nil {
+	if info.Added, err = addSpending(r, &info.Event, spendingTypes); err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
 		return
@@ -87,32 +87,6 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
 }
-
-// 
-// type Event struct {
-// 	Id int64
-// 	Reference string
-// 	CreatedAt EventTime
-// 	PromoterId int64
-// 	PromoterName string
-// 	Participants []User
-// 	Spending []Spending
-// }
-
-// type Spending struct {
-// 	Id int64
-// 	TypeId int64
-// 	TypeReference string
-// 	EventId int64
-// 	Description string
-// 	Amount float64
-// 	SpendingAt EventTime
-// 	CreatedAt EventTime
-// 	PayerId int64
-// 	PayerName string
-// 	For []SpendingFor
-// 	Rows RowToDisplay
-// }
 
 func addSpending(r *auth.AuthenticatedRequest, ev *tools.Event, spendingTypes map[int64]string) (bool, error) {
 	
@@ -145,29 +119,67 @@ func addSpending(r *auth.AuthenticatedRequest, ev *tools.Event, spendingTypes ma
 	if date := r.PostFormValue("date"); date == "" {
 		return false, nil /*errors.New("bad entry for amount*/
 	} else {
-		
-		tools.Info(date)
-		
 		if spd.SpendingAt.TimeStruct, err = time.Parse("2006-01-02", date); err != nil {
 			return false, err
 		}
 		spd.SpendingAt.FeedEventTimeFromStruct()
-		
 	}
 	
 	if spdType := r.PostFormValue("spdType"); spdType == "" {
 		return false, nil /*errors.New("bad entry for amount*/
 	} else {
-		val, _ := spendingTypes[]
+		var i int64
+		if i, err = strconv.ParseInt(spdType, 10, 64); err != nil {
+			return false, err
+		}
+		
+		if s, ok := spendingTypes[i]; !ok {
+			return false, errors.New("Spending type not existing ! -> "+ spdType)
+		} else {
+			spd.TypeId = i
+			spd.TypeReference = s
+		}
+	}
+	
+	if payer := r.PostFormValue("payer"); payer == "" {
+		return false, nil /*errors.New("bad entry for amount*/
+	} else {
+		var i int64
+		if i, err = strconv.ParseInt(payer, 10, 64); err != nil {
+			return false, err
+		}
+		
+		if u, ok := tools.UsersId[i]; !ok {
+			return false, errors.New("Spending type not existing ! -> "+ payer)
+		} else {
+			spd.PayerId = i
+			spd.PayerName = u.Login
+		}
+	}
+	
+	var forDebtor []tools.User 
+	 
+	if allPaid := r.PostFormValue("allPaid"); allPaid == "on" {
+		for _, user := range ev.Participants {
+			forDebtor = append(forDebtor, user)
+		}
+	} else {
+		for _, user := range ev.Participants {
+			if paid := r.PostFormValue(strconv.FormatInt(user.Id, 10)+"-Paid"); paid == "on" {
+				forDebtor = append(forDebtor, user)
+			}
+		}
+	}
+	
+	if len(forDebtor) == 0 || len(forDebtor) > len(ev.Participants) {
+		return false, errors.New("Bad numbers of debtors")
+	}
+	
+	for _, user := range forDebtor {
+		spd.For = append(spd.For, tools.SpendingFor{user.Id,user.Login,spd.Amount/float64(len(forDebtor))})
 	}
 	
 	tools.Info(spd)
-	// payer
-	// spdType
-		
-// 	for _, user := range ev.Participants {
-// 		//paid
-// 	}
 	
 	
 	return false, nil
