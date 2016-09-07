@@ -1,6 +1,7 @@
 package db
 
 import (
+	"time"
 	"strings"
 	"../tools"
 	"database/sql"
@@ -164,7 +165,7 @@ func LoadThisEvent(ev *tools.Event) error {
 				where 
 					s.event_id = ?
 				order by 
-					s.spending_at desc`, ev.Id)
+					s.spending_at desc, s.id desc`, ev.Id)
 	if err != nil {
 		return err
 	}
@@ -176,10 +177,9 @@ func LoadThisEvent(ev *tools.Event) error {
 		if err != nil {
 			return err
 		}
+		s.EventId = ev.Id
 		ev.Spending = append(ev.Spending, s)
 	}
-	
-// 	tools.Info(ev.Id)
 	
 	for i, s := range ev.Spending {
 		
@@ -206,6 +206,45 @@ func LoadThisEvent(ev *tools.Event) error {
 		s.Feed(ev.Participants)
 		ev.Spending[i]=s
 	}
+	
+	return nil
+}
+
+func AddThisSpending(ev *tools.Event, spd *tools.Spending) error {
+	
+	var err error
+	var res sql.Result
+	
+	// Load event
+	
+	res, err = DbConnect.Exec(`
+				INSERT INTO 
+					spending (event_id, type_id, description, amount, spending_at, created_at, payer_id)
+				VALUES 
+					(?, ?, ?, ?, ?, ?, ?);`, spd.EventId, spd.TypeId, spd.Description, spd.Amount, spd.SpendingAt.TimeStamp, time.Now().Unix(), spd.PayerId)
+	if err != nil {
+		return err
+	}
+	
+	if spd.Id, err = res.LastInsertId(); err != nil {
+		return err
+	}
+	
+	for _, f := range spd.For {
+		res, err = DbConnect.Exec(`
+					INSERT INTO 
+						spending_for (spending_id, debtor_id, debt)
+					VALUES 
+						(?, ?, ?);`, spd.Id, f.DebtorId, f.Debt)
+		if err != nil {
+			return err
+		}
+	}
+	
+	spd.Feed(ev.Participants)
+	
+	ev.Spending = tools.Unshift(ev.Spending, *spd)
+// 	ev.Spending = append(ev.Spending, *spd)
 	
 	return nil
 }

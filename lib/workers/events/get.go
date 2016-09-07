@@ -179,8 +179,9 @@ func addSpending(r *auth.AuthenticatedRequest, ev *tools.Event, spendingTypes ma
 		spd.For = append(spd.For, tools.SpendingFor{user.Id,user.Login,spd.Amount/float64(len(forDebtor))})
 	}
 	
-	tools.Info(spd)
+	if err = db.AddThisSpending(ev, &spd); err != nil {
+		return false, err
+	}
 	
-	
-	return false, nil
+	return true, nil
 }

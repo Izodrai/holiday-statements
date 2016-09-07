@@ -11,3 +11,7 @@ func GenerateNav(login string) []string {
 	
 	return nav
 }
+
+func Unshift(arr []Spending, x Spending) []Spending {
+	return append([]Spending{x}, arr...)
+}
