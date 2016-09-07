@@ -28,6 +28,8 @@
 		<p>Problème lors de l'ajout de la dépense ou du chargement</p>
 	{{- else}}
 		{{if .Event -}}
+		
+		<h3>Ajouter une dépense:</h3>
 		<table style="border-style:solid">
 			<form name="inscription" method="post" action="/events?get={{.Actualize}}">
 				<tr>

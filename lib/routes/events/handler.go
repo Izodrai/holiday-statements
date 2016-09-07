@@ -15,6 +15,10 @@ func HandleEvents(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		evs.Get(w,r)
 		return 
 	}
+	if _, ok := params["addEv"]; ok {
+		evs.Add(w,r)
+		return 
+	}
 	
 	evs.List(w,r)
 }

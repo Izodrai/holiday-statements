@@ -31,4 +31,3 @@ func List(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	
 	tmpl.TemplateMe(w, r, "lib/templates/events/list.html", info)
 }
-
