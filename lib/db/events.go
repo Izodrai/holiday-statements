@@ -215,8 +215,6 @@ func AddThisSpending(ev *tools.Event, spd *tools.Spending) error {
 	var err error
 	var res sql.Result
 	
-	// Load event
-	
 	res, err = DbConnect.Exec(`
 				INSERT INTO 
 					spending (event_id, type_id, description, amount, spending_at, created_at, payer_id)
@@ -244,7 +242,38 @@ func AddThisSpending(ev *tools.Event, spd *tools.Spending) error {
 	spd.Feed(ev.Participants)
 	
 	ev.Spending = tools.Unshift(ev.Spending, *spd)
-// 	ev.Spending = append(ev.Spending, *spd)
+	
+	return nil
+}
+
+func AddThisEvent(ev *tools.Event) error {
+	
+	var err error
+	var res sql.Result
+	
+	res, err = DbConnect.Exec(`
+				INSERT INTO 
+					events (reference, created_at, promoter_id)
+				VALUES 
+					(?, ?, ?);`, ev.Reference, time.Now().Unix(), ev.PromoterId)
+	if err != nil {
+		return err
+	}
+	
+	if ev.Id, err = res.LastInsertId(); err != nil {
+		return err
+	}
+	
+	for _, p := range ev.Participants {
+		res, err = DbConnect.Exec(`
+					INSERT INTO 
+						participants (user_id, event_id)
+					VALUES 
+						(?, ?);`, p.Id, ev.Id)
+		if err != nil {
+			return err
+		}
+	}
 	
 	return nil
 }
