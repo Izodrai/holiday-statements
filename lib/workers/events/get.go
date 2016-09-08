@@ -25,6 +25,7 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Added bool
 		Error bool
 		ErrorMsg string
+		Calc []tools.Debts
 	}{
 		Title: "évènement",
 		Nav: tools.GenerateNav(r.Username),
@@ -35,6 +36,7 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Added: false,
 		Error: false,
 		ErrorMsg: "",
+		Calc: []tools.Debts{},
 	}
 	
 	params := r.URL.Query()
@@ -84,6 +86,8 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	
 	info.Title = info.Event.Reference
 	info.Actualize = info.Event.Id
+	
+	calculateDebts(&info.Event, &info.Calc)
 	
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
 }
@@ -184,4 +188,60 @@ func addSpending(r *auth.AuthenticatedRequest, ev *tools.Event, spendingTypes ma
 	}
 	
 	return true, nil
+}
+
+func calculateDebts(ev *tools.Event, Calc *[]tools.Debts) {
+	
+	var debts = make(map[int64]tools.Debts)
+	
+	for _, participant := range ev.Participants {
+		var d = make(map[int64]float64)
+		debts[participant.Id]= tools.Debts{participant.Id, tools.UsersId[participant.Id].Login,0,"",d, []tools.DebsToPrint{}}
+	}
+	
+	for _, spending := range ev.Spending {
+		d, _ := debts[spending.PayerId] 
+		d.TotalSpending += spending.Amount
+		debts[spending.PayerId] = d
+		
+		for _, spFor := range spending.For {
+			
+			if spFor.DebtorId != spending.PayerId {
+				dbs,_ := debts[spFor.DebtorId]
+				dbs.Debts[spending.PayerId] += spFor.Debt
+				debts[spFor.DebtorId] = dbs
+			}
+		}
+	}
+	
+	for debtorId, debtorDebt := range debts {
+		for creditorId, debtorToCreditor := range debtorDebt.Debts {
+			if creditorDebt, ok := debts[creditorId].Debts[debtorId]; ok {
+				switch {
+				case debtorToCreditor == creditorDebt :
+					delete(debts[creditorId].Debts, debtorId)
+					delete(debts[debtorId].Debts, creditorId)
+				case debtorToCreditor > creditorDebt :
+					delete(debts[creditorId].Debts, debtorId)
+					debts[debtorId].Debts[creditorId]=debtorToCreditor-creditorDebt
+				case debtorToCreditor < creditorDebt  :
+					debts[creditorId].Debts[debtorId]=creditorDebt-debtorToCreditor
+					delete(debts[debtorId].Debts, creditorId)
+				}
+			}
+		}
+	}
+	
+	for _, participant := range ev.Participants {
+		d, _ := debts[participant.Id]
+		
+		d.STotalSpending = strconv.FormatFloat(d.TotalSpending,'f',2,64)
+		
+		for id, amount := range d.Debts {
+			var sd = tools.DebsToPrint{tools.UsersId[id].Login, strconv.FormatFloat(amount,'f',2,64)}
+			d.SDebts = append(d.SDebts, sd)
+		}
+		
+		*Calc = append(*Calc, d)
+	}
 }

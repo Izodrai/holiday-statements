@@ -5,6 +5,20 @@ import (
 	"strconv"
 )
 
+type Debts struct {
+	DebtorId int64
+	DebtorName string
+	TotalSpending float64
+	STotalSpending string
+	Debts map[int64]float64
+	SDebts []DebsToPrint
+}
+
+type DebsToPrint struct {
+	Name string 
+	Amount string
+}
+
 type Event struct {
 	Id int64
 	Reference string
@@ -88,7 +102,7 @@ func (s *Spending) Feed(participants []User) {
 		s.Rows.Debts = append(s.Rows.Debts, "")
 		for _, sf := range s.For {
 			if sf.DebtorName == user.Login {
-				s.Rows.Debts[i]=strconv.FormatFloat(sf.Debt,'f',2,64)
+				s.Rows.Debts[i]=strconv.FormatFloat(sf.Debt,'f',3,64)
 				break
 			}
 		}

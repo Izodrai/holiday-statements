@@ -106,6 +106,27 @@
 			</tr>
 			{{- end}}
 		</table>
+		
+		<h3>Total :</h3>
+
+		<table style="border-style:solid">
+			{{- range .Calc }}
+				<tr>
+					<td style="border-style:solid;border-width:0px 0px 2px 0px">{{.DebtorName}} a dépensé :</td>
+					<td style="border-style:solid;border-width:0px 0px 2px 0px" padding="0.5px" collspan="2">{{.STotalSpending}}</td>
+				</tr>
+				
+				{{- range .SDebts }}
+					<tr>
+						<td padding="0.5px"> -> Doit</td>
+						<td padding="0.5px">{{.Amount}}</td>
+						<td padding="0.5px">{{.Name}}</td>
+					</tr>
+				{{- end}}
+
+			{{- end}}
+		</table>
+		
 		{{- end}}
 	{{- end}}
 </body>

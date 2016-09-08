@@ -74,7 +74,9 @@ CREATE TABLE debts (
 INSERT INTO users (id, login, pwd, email, rights) 
 VALUES
 	(1, "admin", "$2y$10$lsliCJPCiCsPOrgTgidDrumYuTwg3MGW6CQIy4nn7ziu8OXNiHbpO", "admin@mydomain.country", 1),
-	(2, "user1", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users1@mydomain.country", 0);
+	(2, "user1", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users1@mydomain.country", 0),
+	(3, "user4", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users2@mydomain.country", 0),
+	(4, "user3", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users3@mydomain.country", 0);
 	
 INSERT INTO events (id, reference, created_at, promoter_id)
 VALUES 
@@ -87,7 +89,9 @@ VALUES
 	(1,1),
 	(2,1),
 	(1,2),
-	(2,3);
+	(2,3),
+	(3,1),
+	(4,1);
 	
 INSERT INTO spending_type (id, reference)
 VALUES 
@@ -97,11 +101,24 @@ VALUES
 INSERT INTO spending (id, event_id, type_id, description, amount, spending_at, created_at, payer_id)
 VALUES 
 	(1, 1, 1, "beers", 12.35, 1440416501, 1440416502, 1),
-	(2, 1, 2, "camping", 350.10, 1440436501, 1440436502, 1);
+	(2, 1, 2, "camping", 350.10, 1440436501, 1440436502, 1),
+	(3, 1, 2, "food", 35, 1440436501, 1440436502, 3),
+	(4, 1, 2, "resto", 43.53, 1440436501, 1440436502, 4),
+	(5, 1, 2, "hotel", 954.27, 1440436501, 1440436502, 4);
 	
 INSERT INTO spending_for (spending_id, debtor_id, debt)
 VALUES 
 	(1, 1, 6.175),
 	(1, 2, 6.175),
-	(2, 1, 175.05),
-	(2, 2, 175.05);
+	(2, 1, 87.525),
+	(2, 2, 87.525),
+	(2, 3, 87.525),
+	(2, 4, 87.525),
+	(3, 1, 11.6666666667),
+	(3, 2, 11.6666666667),
+	(3, 3, 11.6666666667),
+	(4, 1, 21.765),
+	(4, 2, 21.765),
+	(5, 2, 318.09),
+	(5, 3, 318.09),
+	(5, 4, 318.09);
