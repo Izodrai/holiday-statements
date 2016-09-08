@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	_ "github.com/mattn/go-sqlite3"
-	"os"
+// 	"os"
 	"strings"
 )
 
@@ -13,7 +13,7 @@ var DbConnect *sql.DB
 
 func Init() error {
 
-	os.Remove("./db/save/spending.db") // to remove
+// 	os.Remove("./db/save/spending.db") // to remove
 
 	var err error
 	var rows *sql.Rows

@@ -68,7 +68,7 @@ type Spending struct {
 
 type RowToDisplay struct {
 	Date string
-	Amount float64
+	Amount string
 	PayerName string
 	Debts []string
 	TypeSpending string
@@ -95,14 +95,14 @@ func (s *Spending) Feed(participants []User) {
 	}
 	
 	s.Rows.Date = s.SpendingAt.TimeString
-	s.Rows.Amount = s.Amount
+	s.Rows.Amount = strconv.FormatFloat(s.Amount,'f',2,64) 
 	s.Rows.PayerName = s.PayerName
 	
 	for i, user := range participants {
 		s.Rows.Debts = append(s.Rows.Debts, "")
 		for _, sf := range s.For {
 			if sf.DebtorName == user.Login {
-				s.Rows.Debts[i]=strconv.FormatFloat(sf.Debt,'f',3,64)
+				s.Rows.Debts[i]=strconv.FormatFloat(sf.Debt,'f',2,64)
 				break
 			}
 		}
