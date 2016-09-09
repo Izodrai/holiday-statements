@@ -78,6 +78,12 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		return
 	}
 	
+	if err = delSpending(r, &info.Event); err != nil {
+		tools.Error(err)
+		tmpl.Template500(w, r)
+		return
+	}
+	
 	if info.Added, err = addSpending(r, &info.Event, spendingTypes); err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
@@ -92,6 +98,33 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
 }
 
+func delSpending(r *auth.AuthenticatedRequest, ev *tools.Event) error {
+	var err error
+	
+	if delSpd := r.PostFormValue("delSpd"); delSpd == "" {
+		return nil
+	} else if delSpd != "Supprimer" {
+		return errors.New("bad entry for delSpd -> "+delSpd)
+	}
+	
+	for i, spending := range ev.Spending {
+		
+		tools.Info("4 -> ", spending.Id)
+		tools.Info(strconv.FormatInt(spending.Id, 10)+"-del")
+		tools.Info(r.PostFormValue(strconv.FormatInt(spending.Id, 10)+"-del"))
+		
+		if id := r.PostFormValue(strconv.FormatInt(spending.Id, 10)+"-del"); id == "on" {
+			
+		tools.Info("5 -> ", id)
+			if err = db.DelThisSpending(&spending.Id); err != nil {
+				return err
+			} else {
+				ev.Spending = ev.Spending[:i+copy(ev.Spending[i:], ev.Spending[i+1:])]
+			}
+		}
+	}
+	return nil
+}
 func addSpending(r *auth.AuthenticatedRequest, ev *tools.Event, spendingTypes map[int64]string) (bool, error) {
 	
 	var err error

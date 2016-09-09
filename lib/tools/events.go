@@ -67,6 +67,7 @@ type Spending struct {
 }
 
 type RowToDisplay struct {
+	Id int64
 	Date string
 	Amount string
 	PayerName string
@@ -94,6 +95,7 @@ func (s *Spending) Feed(participants []User) {
 		s.For[i]=sf
 	}
 	
+	s.Rows.Id = s.Id
 	s.Rows.Date = s.SpendingAt.TimeString
 	s.Rows.Amount = strconv.FormatFloat(s.Amount,'f',2,64) 
 	s.Rows.PayerName = s.PayerName

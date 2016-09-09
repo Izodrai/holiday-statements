@@ -31,7 +31,7 @@
 		
 		<h3>Ajouter une dépense:</h3>
 		<table style="border-style:solid">
-			<form name="inscription" method="post" action="/events?get={{.Actualize}}">
+			<form name="add" method="post" action="/events?get={{.Actualize}}">
 				<tr>
 					<td>montant :</td>
 					<td><input type="text" name="amount"/></td>
@@ -75,36 +75,42 @@
 				<tr>
 					<td colspan="2"><input type="submit" name="addSpd" value="Ajouter"/></td>
 				</tr>
-
 			</form>
 		</table>
 		
 		<h3>Vos dernières dépenses :</h3>
 		
 		<table style="border-style:solid">
-			<tr>
-				<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Date</td>
-				<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Montant</td>
-				<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Payeur</td>
-				{{- range .Event.Participants }}
-				<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">{{.Login}}</td>
+			<form name="deletion" method="post" action="/events?get={{.Actualize}}">
+				<tr>
+					<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Date</td>
+					<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Montant</td>
+					<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Payeur</td>
+					{{- range .Event.Participants }}
+					<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">{{.Login}}</td>
+					{{- end}}
+					<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Type de dépense</td>
+					<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Description</td>
+					<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Supprimer</td>
+				</tr>
+				
+				{{- range .Event.Spending }}
+				<tr>
+					<td padding="0.5px">{{.Rows.Date}}</td>
+					<td padding="0.5px">{{.Rows.Amount}}</td>
+					<td padding="0.5px">{{.Rows.PayerName}}</td>
+					{{- range .Rows.Debts }}
+						<td padding="0.5px">{{.}}</td>
+					{{- end}}
+					<td padding="0.5px">{{.Rows.TypeSpending}}</td>
+					<td padding="0.5px">{{.Rows.Description}}</td>
+					<td padding="0.5px" style="text-align:center"><input type='checkbox' name='deletion' value='{{.Rows.Id}}-del'></td>
+				</tr>
 				{{- end}}
-				<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Type de dépense</td>
-				<td padding="0.5px" style="border-style:solid;border-width:0px 0px 2px 0px">Description</td>
-			</tr>
-			
-			{{- range .Event.Spending }}
-			<tr>
-				<td padding="0.5px">{{.Rows.Date}}</td>
-				<td padding="0.5px">{{.Rows.Amount}}</td>
-				<td padding="0.5px">{{.Rows.PayerName}}</td>
-				{{- range .Rows.Debts }}
-					<td padding="0.5px">{{.}}</td>
-				{{- end}}
-				<td padding="0.5px">{{.Rows.TypeSpending}}</td>
-				<td padding="0.5px">{{.Rows.Description}}</td>
-			</tr>
-			{{- end}}
+				<tr>
+					<td colspan="10"><input type="submit" name="delSpd" value="Supprimer"/></td>
+				</tr>
+			</form>
 		</table>
 		
 		<h3>Total :</h3>

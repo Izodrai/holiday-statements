@@ -277,3 +277,28 @@ func AddThisEvent(ev *tools.Event) error {
 	
 	return nil
 }
+
+func DelThisSpending(spd *int64) error {
+	
+	var err error
+	
+	_, err = DbConnect.Exec(`
+				DELETE FROM 
+					spending_for 
+				WHERE 
+					spending_id = ?;`, spd)
+	if err != nil {
+		return err
+	}
+	
+	_, err = DbConnect.Exec(`
+				DELETE FROM 
+					spending
+				WHERE 
+					id = ?;`, spd)
+	if err != nil {
+		return err
+	}
+	
+	return nil
+}
