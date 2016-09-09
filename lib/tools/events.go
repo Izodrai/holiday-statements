@@ -5,16 +5,29 @@ import (
 	"strconv"
 )
 
+type ResultSpending struct {
+	TotalSpending float64
+	TotalSpendingByType map[int64]float64
+	STotalSpendingByType []ToPrint
+}
+
+func (rs * ResultSpending) Feed(spendingTypes map[int64]string) {
+	for id, amount := range rs.TotalSpendingByType {
+		typeReference := spendingTypes[id]
+		rs.STotalSpendingByType = append (rs.STotalSpendingByType, ToPrint{typeReference, strconv.FormatFloat(amount,'f',2,64)})
+	}
+}
+
 type Debts struct {
 	DebtorId int64
 	DebtorName string
 	TotalSpending float64
 	STotalSpending string
 	Debts map[int64]float64
-	SDebts []DebsToPrint
+	SDebts []ToPrint
 }
 
-type DebsToPrint struct {
+type ToPrint struct {
 	Name string 
 	Amount string
 }

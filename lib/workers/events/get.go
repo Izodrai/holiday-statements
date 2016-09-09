@@ -25,7 +25,8 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Added bool
 		Error bool
 		ErrorMsg string
-		Calc []tools.Debts
+		ResultDebts []tools.Debts
+		ResultSpending tools.ResultSpending
 	}{
 		Title: "évènement",
 		Nav: tools.GenerateNav(r.Username),
@@ -36,7 +37,8 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Added: false,
 		Error: false,
 		ErrorMsg: "",
-		Calc: []tools.Debts{},
+		ResultDebts: []tools.Debts{},
+		ResultSpending: tools.ResultSpending{},
 	}
 	
 	params := r.URL.Query()
@@ -93,7 +95,7 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	info.Title = info.Event.Reference
 	info.Actualize = info.Event.Id
 	
-	calculateDebts(&info.Event, &info.Calc)
+	calculateDebts(&info.Event, &info.ResultDebts, &info.ResultSpending, spendingTypes)
 	
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
 }
@@ -108,14 +110,7 @@ func delSpending(r *auth.AuthenticatedRequest, ev *tools.Event) error {
 	}
 	
 	for i, spending := range ev.Spending {
-		
-		tools.Info("4 -> ", spending.Id)
-		tools.Info(strconv.FormatInt(spending.Id, 10)+"-del")
-		tools.Info(r.PostFormValue(strconv.FormatInt(spending.Id, 10)+"-del"))
-		
 		if id := r.PostFormValue(strconv.FormatInt(spending.Id, 10)+"-del"); id == "on" {
-			
-		tools.Info("5 -> ", id)
 			if err = db.DelThisSpending(&spending.Id); err != nil {
 				return err
 			} else {
@@ -223,13 +218,14 @@ func addSpending(r *auth.AuthenticatedRequest, ev *tools.Event, spendingTypes ma
 	return true, nil
 }
 
-func calculateDebts(ev *tools.Event, Calc *[]tools.Debts) {
+func calculateDebts(ev *tools.Event, ResultDebts *[]tools.Debts, ResultSpending *tools.ResultSpending, spendingTypes map[int64]string) {
 	
 	var debts = make(map[int64]tools.Debts)
+	ResultSpending.TotalSpendingByType = make(map[int64]float64)
 	
 	for _, participant := range ev.Participants {
 		var d = make(map[int64]float64)
-		debts[participant.Id]= tools.Debts{participant.Id, tools.UsersId[participant.Id].Login,0,"",d, []tools.DebsToPrint{}}
+		debts[participant.Id]= tools.Debts{participant.Id, tools.UsersId[participant.Id].Login,0,"",d, []tools.ToPrint{}}
 	}
 	
 	for _, spending := range ev.Spending {
@@ -237,8 +233,16 @@ func calculateDebts(ev *tools.Event, Calc *[]tools.Debts) {
 		d.TotalSpending += spending.Amount
 		debts[spending.PayerId] = d
 		
+		ResultSpending.TotalSpending += spending.Amount
+		
+		if tot, ok := ResultSpending.TotalSpendingByType[spending.TypeId]; ok {
+			tot += spending.Amount
+			ResultSpending.TotalSpendingByType[spending.TypeId] = tot
+		} else {
+			ResultSpending.TotalSpendingByType[spending.TypeId] = spending.Amount
+		}
+		
 		for _, spFor := range spending.For {
-			
 			if spFor.DebtorId != spending.PayerId {
 				dbs,_ := debts[spFor.DebtorId]
 				dbs.Debts[spending.PayerId] += spFor.Debt
@@ -271,10 +275,11 @@ func calculateDebts(ev *tools.Event, Calc *[]tools.Debts) {
 		d.STotalSpending = strconv.FormatFloat(d.TotalSpending,'f',2,64)
 		
 		for id, amount := range d.Debts {
-			var sd = tools.DebsToPrint{tools.UsersId[id].Login, strconv.FormatFloat(amount,'f',2,64)}
+			var sd = tools.ToPrint{tools.UsersId[id].Login, strconv.FormatFloat(amount,'f',2,64)}
 			d.SDebts = append(d.SDebts, sd)
 		}
 		
-		*Calc = append(*Calc, d)
+		*ResultDebts = append(*ResultDebts, d)
 	}
+	ResultSpending.Feed(spendingTypes)
 }
