@@ -282,4 +282,49 @@ func calculateDebts(ev *tools.Event, ResultDebts *[]tools.Debts, ResultSpending 
 		*ResultDebts = append(*ResultDebts, d)
 	}
 	ResultSpending.Feed(spendingTypes)
+	
+	
+	////////////////////////////////////
+	
+	var maxCtDebts int
+	var idWithMaxDebts, maxDebts int64
+	var ctDebts = make(map[int64]tools.ExtendedResults)
+	var allDebts = make(map[int64]map[int64]float64)
+	
+	for _,debts := range *ResultDebts {
+		allDebts[debts.DebtorId] = make(map[int64]float64)
+		ctDebts[debts.DebtorId]=tools.ExtendedResults{len(debts.Debts), 0}
+		for creditorId,amount := range debts.Debts {
+			allDebts[debts.DebtorId][creditorId] = amount
+			extResult := ctDebts[debts.DebtorId]
+			extResult.TotalDebts += amount 
+			ctDebts[debts.DebtorId] = extResult
+		}
+		
+		/*
+		if ctDebts[debts.DebtorId].CtTotalDebts > maxDebts {
+			maxDebts == ctDebts[debts.DebtorId].CtTotalDebts
+			idWithMaxDebts = debts.DebtorId
+		}
+		
+		
+		if ctDebts[debts.DebtorId].CtTotalDebts > maxCtDebts {
+			maxCtDebts == ctDebts[debts.DebtorId].CtTotalDebts
+			idWithMaxDebts = debts.DebtorId
+		}
+		
+		if ctDebts[debts.DebtorId].TotalDebts == maxCtDebts {*/
+	}
+	
+	tools.Info(allDebts)
+	tools.Info(ctDebts)
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

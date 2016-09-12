@@ -5,6 +5,11 @@ import (
 	"strconv"
 )
 
+type ExtendedResults struct {
+	CtTotalDebts int
+	TotalDebts float64
+}
+
 type ResultSpending struct {
 	TotalSpending float64
 	TotalSpendingByType map[int64]float64
