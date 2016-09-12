@@ -17,10 +17,18 @@ type ResultSpending struct {
 }
 
 func (rs * ResultSpending) Feed(spendingTypes map[int64]string) {
+	var percent, total float64
+	
+	for _, amount := range rs.TotalSpendingByType {
+		total += amount
+	}
+	
 	for id, amount := range rs.TotalSpendingByType {
 		typeReference := spendingTypes[id]
-		rs.STotalSpendingByType = append (rs.STotalSpendingByType, ToPrint{typeReference, strconv.FormatFloat(amount,'f',2,64)})
+		percent = (amount*100)/total
+		rs.STotalSpendingByType = append (rs.STotalSpendingByType, ToPrint{typeReference, strconv.FormatFloat(amount,'f',2,64), strconv.FormatFloat(percent,'f',2,64)+"%"})
 	}
+	rs.STotalSpendingByType = append (rs.STotalSpendingByType, ToPrint{"Total", strconv.FormatFloat(total,'f',2,64), ""})
 }
 
 type Debts struct {
@@ -35,6 +43,7 @@ type Debts struct {
 type ToPrint struct {
 	Name string 
 	Amount string
+	Percent string
 }
 
 type Event struct {

@@ -275,7 +275,7 @@ func calculateDebts(ev *tools.Event, ResultDebts *[]tools.Debts, ResultSpending 
 		d.STotalSpending = strconv.FormatFloat(d.TotalSpending,'f',2,64)
 		
 		for id, amount := range d.Debts {
-			var sd = tools.ToPrint{tools.UsersId[id].Login, strconv.FormatFloat(amount,'f',2,64)}
+			var sd = tools.ToPrint{tools.UsersId[id].Login, strconv.FormatFloat(amount,'f',2,64), ""}
 			d.SDebts = append(d.SDebts, sd)
 		}
 		
@@ -286,40 +286,54 @@ func calculateDebts(ev *tools.Event, ResultDebts *[]tools.Debts, ResultSpending 
 	
 	////////////////////////////////////
 	
-	var maxCtDebts int
-	var idWithMaxDebts, maxDebts int64
-	var ctDebts = make(map[int64]tools.ExtendedResults)
 	var allDebts = make(map[int64]map[int64]float64)
+	var ok bool
 	
 	for _,debts := range *ResultDebts {
 		allDebts[debts.DebtorId] = make(map[int64]float64)
-		ctDebts[debts.DebtorId]=tools.ExtendedResults{len(debts.Debts), 0}
 		for creditorId,amount := range debts.Debts {
 			allDebts[debts.DebtorId][creditorId] = amount
-			extResult := ctDebts[debts.DebtorId]
-			extResult.TotalDebts += amount 
-			ctDebts[debts.DebtorId] = extResult
 		}
-		
-		/*
-		if ctDebts[debts.DebtorId].CtTotalDebts > maxDebts {
-			maxDebts == ctDebts[debts.DebtorId].CtTotalDebts
-			idWithMaxDebts = debts.DebtorId
+		if len(allDebts[debts.DebtorId]) == 0 {
+			delete(allDebts, debts.DebtorId)
 		}
-		
-		
-		if ctDebts[debts.DebtorId].CtTotalDebts > maxCtDebts {
-			maxCtDebts == ctDebts[debts.DebtorId].CtTotalDebts
-			idWithMaxDebts = debts.DebtorId
-		}
-		
-		if ctDebts[debts.DebtorId].TotalDebts == maxCtDebts {*/
 	}
 	
-	tools.Info(allDebts)
-	tools.Info(ctDebts)
+	for _, debtor := range ev.Participants {
+		
+		if _, ok = allDebts[debtor.Id]; !ok {
+			continue
+		}
+		
+		for _, creditor := range ev.Participants {
+			if creditor.Id == debtor.Id {
+				continue
+			}
+			
+			var debtorDebt, creditorDebt, debtorCreditorOfCreditorDebt float64
+			
+			if debtorDebt, ok = allDebts[debtor.Id][creditor.Id]; !ok {
+				continue
+			}
+			
+			for _, creditorOfCreditor := range ev.Participants {
+				
+				if creditorDebt, ok = allDebts[creditor.Id][creditorOfCreditor.Id]; !ok {
+					continue
+				}
+				
+				if debtorCreditorOfCreditorDebt, ok = allDebts[debtor.Id][creditorOfCreditor.Id]; !ok {
+					continue
+				}
+				
+				allDebts[debtor.Id][creditor.Id] = debtorDebt+debtorCreditorOfCreditorDebt
+				allDebts[creditor.Id][creditorOfCreditor.Id] = creditorDebt+debtorCreditorOfCreditorDebt
+				delete(allDebts[debtor.Id], creditorOfCreditor.Id)
+			}
+		}
+	}
 	
-	
+	/////////////// afficher
 	
 	
 	
