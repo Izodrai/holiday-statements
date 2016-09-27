@@ -1,6 +1,7 @@
 package users
 
 import (
+	"net/http"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,7 +15,7 @@ func get_user_by_id_or_name(c *gin.Context) {
 	id := 10
 	user_name := search_user_name
 	
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"id": id,
 		"name": user_name,
 	})
