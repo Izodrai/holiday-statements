@@ -5,10 +5,11 @@ import (
 )
 
 // http://localhost:8080/users/test
+// curl -i -X GET http://localhost:8080/users/test
 
-func get_user_by_name(c *gin.Context) {
+func get_user_by_id_or_name(c *gin.Context) {
 	
-	search_user_name := c.Param("user_name")
+	search_user_name := c.Param("user_info")
 	
 	id := 10
 	user_name := search_user_name
