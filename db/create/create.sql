@@ -8,7 +8,7 @@ CREATE TABLE users (
     UNIQUE (email)
 );
 
-CREATE TABLE know (
+CREATE TABLE friends (
     user_id_1 INTEGER,
     user_id_2 INTEGER,
     FOREIGN KEY(user_id_1) REFERENCES users(id),
@@ -73,10 +73,10 @@ CREATE TABLE debts (
 
 INSERT INTO users (id, login, pwd, email, rights) 
 VALUES
-	(1, "admin", "$2y$10$lsliCJPCiCsPOrgTgidDrumYuTwg3MGW6CQIy4nn7ziu8OXNiHbpO", "admin@mydomain.country", 1),
-	(2, "user1", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users1@mydomain.country", 0),
-	(3, "user4", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users2@mydomain.country", 0),
-	(4, "user3", "$2y$10$UgGYS7.GcVpauYMdmwGLEuf7bcOFii0g/OPQtjnCBCRdmHGmCSm.K", "users3@mydomain.country", 0);
+	(1, "admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "admin@mydomain.country", 1),
+	(2, "user1", "0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90", "users1@mydomain.country", 0),
+	(3, "user2", "6025d18fe48abd45168528f18a82e265dd98d421a7084aa09f61b341703901a3", "users2@mydomain.country", 0),
+	(4, "user3", "5860faf02b6bc6222ba5aca523560f0e364ccd8b67bee486fe8bf7c01d492ccb", "users3@mydomain.country", 0);
 	
 INSERT INTO events (id, reference, created_at, promoter_id)
 VALUES 

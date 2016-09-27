@@ -1,43 +1,18 @@
 package main
 
 import (
-	localAuth "./lib/auth"
-	"./lib/db"
-	"./lib/routes/events"
-	"./lib/routes/index"
-	"./lib/routes/users"
+	"./lib/users"
 	"./lib/tools"
-	auth "github.com/abbot/go-http-auth"
-	"log"
-	"net/http"
+	"github.com/gin-gonic/gin"
 ) 
 
 func main() {
-
+	
 	tools.InitLog(true)
 
-	if err := db.Init(); err != nil {
-		db.DbConnect.Close()
-		tools.FatalError(err)
-	}
-	defer db.DbConnect.Close()
+	router := gin.Default()
 
-	if err := localAuth.Init(); err != nil {
-		tools.FatalError(err)
-	}
+	users.Handler(router)
 	
-	userAuth := auth.NewBasicAuthenticator("Current Authentication", localAuth.UserSecret)
-	adminAuth := auth.NewBasicAuthenticator("Admin Authentication", localAuth.AdminSecret)
-
-	http.HandleFunc("/", index.HandleDefault)
-
-// 	http.HandleFunc("/index", userAuth.Wrap(index.HandleIndex))
-
-	http.HandleFunc("/events", userAuth.Wrap(events.HandleEvents))
-
-	http.HandleFunc("/users", adminAuth.Wrap(users.HandleUsers))
-
-	tools.Info("Working")
-
-	log.Fatal(http.ListenAndServe(":80", nil))
+	router.Run(":8080")
 }
