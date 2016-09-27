@@ -26,6 +26,7 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Error bool
 		ErrorMsg string
 		ResultDebts []tools.Debts
+		ResultDebtsOptimize []tools.Debts
 		ResultSpending tools.ResultSpending
 	}{
 		Title: "évènement",
@@ -38,6 +39,7 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Error: false,
 		ErrorMsg: "",
 		ResultDebts: []tools.Debts{},
+		ResultDebtsOptimize: []tools.Debts{},
 		ResultSpending: tools.ResultSpending{},
 	}
 	
@@ -95,7 +97,7 @@ func Get(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 	info.Title = info.Event.Reference
 	info.Actualize = info.Event.Id
 	
-	calculateDebts(&info.Event, &info.ResultDebts, &info.ResultSpending, spendingTypes)
+	calculateDebts(&info.Event, &info.ResultDebts, &info.ResultDebtsOptimize, &info.ResultSpending, spendingTypes)
 	
 	tmpl.TemplateMe(w, r, "lib/templates/events/get.html", info)
 }
@@ -218,7 +220,7 @@ func addSpending(r *auth.AuthenticatedRequest, ev *tools.Event, spendingTypes ma
 	return true, nil
 }
 
-func calculateDebts(ev *tools.Event, ResultDebts *[]tools.Debts, ResultSpending *tools.ResultSpending, spendingTypes map[int64]string) {
+func calculateDebts(ev *tools.Event, ResultDebts, ResultDebtsOptimize *[]tools.Debts, ResultSpending *tools.ResultSpending, spendingTypes map[int64]string) {
 	
 	var debts = make(map[int64]tools.Debts)
 	ResultSpending.TotalSpendingByType = make(map[int64]float64)
@@ -333,12 +335,14 @@ func calculateDebts(ev *tools.Event, ResultDebts *[]tools.Debts, ResultSpending 
 		}
 	}
 	
-	/////////////// afficher
-	
-	
-	
-	
-	
-	
-	
+
+	for _,debts := range *ResultDebts {
+		debts.Debts = allDebts[debts.DebtorId]
+		debts.SDebts = []tools.ToPrint{}
+		for id, amount := range debts.Debts {
+			var sd = tools.ToPrint{tools.UsersId[id].Login, strconv.FormatFloat(amount,'f',2,64), ""}
+			debts.SDebts = append(debts.SDebts, sd)
+		}
+		*ResultDebtsOptimize = append(*ResultDebtsOptimize, debts)
+	}
 }
