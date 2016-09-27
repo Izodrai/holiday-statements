@@ -27,6 +27,6 @@ func authentificate(c *gin.Context) {
 }
 
 type login_form struct {
-    Login     string `form:"login" binding:"required"`
-    Pwd string `form:"pwd" binding:"required"`
+    Login  string `form:"login" binding:"required"`
+    Pwd    string `form:"pwd" binding:"required"`
 }

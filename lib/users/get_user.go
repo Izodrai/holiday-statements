@@ -1,7 +1,10 @@
 package users
 
 import (
+// 	"../tools"
+	"strconv"
 	"net/http"
+// 	"encoding/json"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,13 +13,29 @@ import (
 
 func get_user_by_id_or_name(c *gin.Context) {
 	
-	search_user_name := c.Param("user_info")
+	var u User
 	
-	id := 10
-	user_name := search_user_name
+	search := c.Param("user_info")
 	
-	c.JSON(http.StatusOK, gin.H{
-		"id": id,
-		"name": user_name,
-	})
+	if id, err := strconv.ParseInt(search, 10, 64); err == nil {
+		if sU, ok := UsersId[id]; ok {
+			u = sU
+		}
+	} else if sU, ok := Users[search]; ok {
+		u = sU
+	}
+		
+	if u.Id != 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"user": u,
+			"msg": "user found",
+		})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"search": search,
+			"msg": "user not found",
+		})
+		return
+	}
 }
