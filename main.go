@@ -2,7 +2,7 @@ package main
 
 import (
 	"time"
-	"./lib/login"
+	"./lib/authentification"
 	"./lib/users"
 	"./lib/tools"
 	"github.com/gin-gonic/gin"
@@ -24,7 +24,14 @@ func main() {
 	
 	
 	
-	login.Handler(router)
+	
+	
+	
+	
+	
+	
+	
+	authentification.Handler(router)
 	users.Handler(router)
 	
 	router.Run(":8080")

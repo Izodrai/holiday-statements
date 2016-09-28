@@ -1,4 +1,4 @@
-package login
+package authentification
 
 import (
 	"time"
@@ -10,9 +10,9 @@ import (
 
 // http://localhost:8080/login/
 
-// curl -i -X POST -d '{"login":"C-3PO","pwd":"R2D2"}' http://localhost:8080/login/
+// curl -i -X POST -d '{"login":"C-3PO","pwd":"R2D2"}' http://localhost:8080/authentification/
 
-func authentificate(c *gin.Context) {
+func login(c *gin.Context) {
 
 	var json login_form
 	
