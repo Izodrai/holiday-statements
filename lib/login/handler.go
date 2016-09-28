@@ -6,7 +6,6 @@ import (
 
 
 func Handler(router *gin.Engine) {
-	
 	login := router.Group("/login")
 	{
 		login.POST("/", authentificate)

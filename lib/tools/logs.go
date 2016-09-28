@@ -36,7 +36,7 @@ var debug bool
 /*
  * Func for init log
  */
-func InitLog(d bool) {
+func Init_log(d bool) {
 
 	debug = d
 	logDisplay = os.Stdout
@@ -48,29 +48,8 @@ func InitLog(d bool) {
 	loggerDebug = log.New(logDisplay, CYAN+"DEBUG   ", logMode)
 }
 
-/*
- * Func for display Error, Debug and Info
- *
-	tools.PrintlnDebug("test")
- *
-	tools.PrintlnError("test")
- *
-	tools.PrintlnInfo("test")
- *
-	tools.PrintlnGreenInfo("test")
- *
-	tools.PrintlnBlueInfo("test")
- *
-	tools.PrintlnYellowInfo("test")
- *
-	tools.PrintlnPurpleInfo("test")
- *
-	tools.PrintlnWhiteInfo("test")
- *
-	tools.PrintlnCyanInfo("test")
-*/
 
-func FatalError(v ...interface{}) {
+func Fatal_error(v ...interface{}) {
 	loggerError.Println(RED + fmt.Sprint(v...) + STOP)
 	os.Exit(0)
 }
@@ -88,26 +67,26 @@ func Debug(v ...interface{}) {
 func Info(v ...interface{}) {
 	loggerInfo.Println(fmt.Sprint(v...))
 }
-func GreenInfo(v ...interface{}) {
+func Green_info(v ...interface{}) {
 	loggerInfo.Println(GREEN + fmt.Sprint(v...) + STOP)
 }
-func BlueInfo(v ...interface{}) {
+func Blue_info(v ...interface{}) {
 	loggerInfo.Println(BRIGHTBLUE + fmt.Sprint(v...) + STOP)
 }
-func YellowInfo(v ...interface{}) {
+func Yellow_info(v ...interface{}) {
 	loggerInfo.Println(YELLOW + fmt.Sprint(v...) + STOP)
 }
-func PurpleInfo(v ...interface{}) {
+func Purple_info(v ...interface{}) {
 	loggerInfo.Println(PURPLE + fmt.Sprint(v...) + STOP)
 }
-func WhiteInfo(v ...interface{}) {
+func White_info(v ...interface{}) {
 	loggerInfo.Println(WHITE + fmt.Sprint(v...) + STOP)
 }
-func CyanInfo(v ...interface{}) {
+func Cyan_info(v ...interface{}) {
 	loggerInfo.Println(BRIGHTCYAN + fmt.Sprint(v...) + STOP)
 }
 
-func InitBar(l int, display bool) *pb.ProgressBar {
+func Init_bar(l int, display bool) *pb.ProgressBar {
 
 	bar := pb.StartNew(l)
 	bar.ShowPercent = display

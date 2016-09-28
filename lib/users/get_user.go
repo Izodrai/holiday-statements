@@ -18,7 +18,7 @@ func get_user_by_id_or_name(c *gin.Context) {
 	search := c.Param("user_info")
 	
 	if id, err := strconv.ParseInt(search, 10, 64); err == nil {
-		if sU, ok := UsersId[id]; ok {
+		if sU, ok := Users_id[id]; ok {
 			u = sU
 		}
 	} else if sU, ok := Users[search]; ok {
@@ -32,7 +32,7 @@ func get_user_by_id_or_name(c *gin.Context) {
 		})
 		return
 	} else {
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusNoContent, gin.H{
 			"search": search,
 			"msg": "user not found",
 		})
