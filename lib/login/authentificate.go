@@ -1,11 +1,10 @@
 package login
 
 import (
-	"fmt"
 	"time"
+	"../tools"
 	"net/http"
 	"../users"
-	"crypto/sha256"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,10 +19,10 @@ func authentificate(c *gin.Context) {
 	if c.BindJSON(&json) == nil {
 		if u, ok := users.Users[json.Login]; ok {
 			
-			if fmt.Sprintf("%x", sha256.Sum256([]byte(json.Pwd))) == u.Password {
+			if tools.Crypt_sha256(json.Pwd) == u.Password {
 				
 				u.Last_connection = time.Now()
-				u.Token =  fmt.Sprintf("%x", sha256.Sum256([]byte(u.Login+"-"+u.Last_connection.Format("2006-01-02 15:04:05"))))
+				u.Token =  tools.Crypt_sha256(u.Login+"-"+u.Last_connection.Format("2006-01-02 15:04:05"))
 				
 				users.Connected_users[u.Id] = u
 				
@@ -57,12 +56,12 @@ type login_form struct {
 }
 
 
-func Check_authentificate(c *gin.Context) bool {
-	
-	if token, ok := users.Connected_users[id]; ok {
-		if token_to_validate == token {
-			return true
-		}
-	}
-	return false
-}
+// func Check_authentificate(c *gin.Context) bool {
+// 	
+// 	if token, ok := users.Connected_users[id]; ok {
+// 		if token_to_validate == token {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
