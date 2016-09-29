@@ -11,7 +11,7 @@ import (
 )
 
 /****
-* http://localhost:8080/user/
+* http://localhost:8080/user/get
 * curl -i -X POST -d '{"user_id":<1>, "token":"<token>", "data": <3 or "name"> }' http://localhost:8080/user/get
 ****/
 
