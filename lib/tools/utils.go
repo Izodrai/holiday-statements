@@ -25,7 +25,7 @@ type User struct {
 type Request struct {
 	User_id  int64 `form:"user_id" binding:"required"`
 	Token    string `form:"token" binding:"required"`
-	Data     interface{} `form:"data" binding:"required"`
+	Data     interface{} `form:"data"`
 }
 
 type Login_form struct {
