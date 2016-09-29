@@ -38,6 +38,11 @@ func Get_user_by_id_or_name(c *gin.Context) {
 	}
 	
 	if u.Id != 0 {
+		
+		u.Email = ""
+		u.Password = ""
+		u.Token = ""
+		
 		c.JSON(http.StatusOK, gin.H{
 			"user": u,
 			"code": http.StatusOK,
