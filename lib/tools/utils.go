@@ -28,7 +28,6 @@ type Request struct {
 	Data     interface{} `form:"data" binding:"required"`
 }
 
-
 type Login_form struct {
 	Login  string `form:"login" binding:"required"`
 	Pwd    string `form:"pwd" binding:"required"`

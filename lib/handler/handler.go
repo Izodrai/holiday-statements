@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"../workers/users"
+	"../workers/user"
 	"../authentification"
 	"github.com/gin-gonic/gin"
 )
@@ -12,8 +12,8 @@ func Handler(router *gin.Engine) {
 	{
 		a.POST("/", authentification.Login)
 	}
-	u := router.Group("/users")
+	u := router.Group("/user")
 	{
-		u.POST("/:user_info", users.Get_user_by_id_or_name)
+		u.POST("/get", user.Get_user_by_id_or_name)
 	}
 }

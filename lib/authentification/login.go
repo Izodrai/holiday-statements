@@ -7,9 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// http://localhost:8080/login/
-
-// curl -i -X POST -d '{"login":"test","pwd":"pwd"}' http://localhost:8080/authentification/
+/****
+* http://localhost:8080/login/
+* curl -i -X POST -d '{"login":"<name>","pwd":"<pwd>"}' http://localhost:8080/authentification/
+****/
 
 func Login(c *gin.Context) {
 
