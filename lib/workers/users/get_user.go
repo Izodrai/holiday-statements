@@ -4,24 +4,29 @@ import (
 // 	"../tools"
 	"strconv"
 	"net/http"
-// 	"encoding/json"
+	"../../authentification"
+	"../../tools"
 	"github.com/gin-gonic/gin"
 )
 
 // http://localhost:8080/users/test
-// curl -i -X GET http://localhost:8080/users/test
+// curl -i -X POST -d '{"user_id":1, "token":"<>", "data":{}}' http://localhost:8080/users/test
 
-func get_user_by_id_or_name(c *gin.Context) {
+func Get_user_by_id_or_name(c *gin.Context) {
 	
-	var u User
+	if !authentification.Check_token(c) {
+		return
+	}
+	
+	var u tools.User
 	
 	search := c.Param("user_info")
 	
 	if id, err := strconv.ParseInt(search, 10, 64); err == nil {
-		if sU, ok := Users_id[id]; ok {
+		if sU, ok := tools.Users_id[id]; ok {
 			u = sU
 		}
-	} else if sU, ok := Users[search]; ok {
+	} else if sU, ok := tools.Users[search]; ok {
 		u = sU
 	}
 		

@@ -2,8 +2,7 @@ package main
 
 import (
 	"time"
-	"./lib/authentification"
-	"./lib/users"
+	"./lib/handler"
 	"./lib/tools"
 	"github.com/gin-gonic/gin"
 ) 
@@ -14,14 +13,12 @@ func main() {
 
 	router := gin.Default()
 
-	users.Users = make(map[string]users.User)
-	users.Users_id = make(map[int64]users.User)
-	users.Connected_users = make(map[int64]users.User)
+	tools.Users = make(map[string]tools.User)
+	tools.Users_id = make(map[int64]tools.User)
+	tools.Connected_users = make(map[int64]tools.User)
 	
-	users.Users["test"]=users.User{1,"test","a1159e9df3670d549d04524532629f5477ceb7deec9b45e47e8c009506ecb2c8","@",false,[]int64{},"",time.Time{}}
-	users.Users_id[1]=users.User{1,"test","a1159e9df3670d549d04524532629f5477ceb7deec9b45e47e8c009506ecb2c8","@",false,[]int64{},"",time.Time{}}
-	
-	
+	tools.Users["test"]=tools.User{1,"test","a1159e9df3670d549d04524532629f5477ceb7deec9b45e47e8c009506ecb2c8","@",false,[]int64{},"",time.Time{}}
+	tools.Users_id[1]=tools.User{1,"test","a1159e9df3670d549d04524532629f5477ceb7deec9b45e47e8c009506ecb2c8","@",false,[]int64{},"",time.Time{}}
 	
 	
 	
@@ -31,8 +28,9 @@ func main() {
 	
 	
 	
-	authentification.Handler(router)
-	users.Handler(router)
+	
+	
+	handler.Handler(router)
 	
 	router.Run(":8080")
 }
