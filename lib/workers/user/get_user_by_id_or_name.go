@@ -1,9 +1,6 @@
 package user
 
 import (
-// 	"fmt"
-// 	"../tools"
-// 	"strconv"
 	"net/http"
 	"../../authentification"
 	"../../tools"
