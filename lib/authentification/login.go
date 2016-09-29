@@ -24,6 +24,8 @@ func Login(c *gin.Context) {
 				u.Token =  tools.Crypt_sha256(u.Login+"-"+u.Last_connection.Format("2006-01-02 15:04:05"))
 				
 				tools.Connected_users[u.Id] = u
+				tools.Users_id[u.Id]
+				tools.Users[u.Login]
 				
 				c.JSON(http.StatusOK, gin.H{
 					"user_id": u.Id,
