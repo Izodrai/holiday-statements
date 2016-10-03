@@ -30,7 +30,7 @@ CREATE TABLE participants (
     FOREIGN KEY(event_id) REFERENCES events(id)
 );
 
-CREATE TABLE spending_type (
+CREATE TABLE spending_types (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(255) NOT NULL
 );
@@ -45,7 +45,7 @@ CREATE TABLE spending (
     spending_at INTEGER,
     created_at INTEGER,
     FOREIGN KEY(event_id) REFERENCES events(id),
-    FOREIGN KEY(type_id) REFERENCES spending_type(id),
+    FOREIGN KEY(type_id) REFERENCES spending_types(id),
     FOREIGN KEY(payer_id) REFERENCES users(id)
 );
 
@@ -94,7 +94,7 @@ VALUES
 	(3,1),
 	(4,1);
 	
-INSERT INTO spending_type (id, name)
+INSERT INTO spending_types (id, name)
 VALUES 
 	(1, "food"),
 	(2, "accommodation");
