@@ -48,7 +48,6 @@ func Init_log(d bool) {
 	loggerDebug = log.New(logDisplay, CYAN+"DEBUG   ", logMode)
 }
 
-
 func Fatal_error(v ...interface{}) {
 	loggerError.Println(RED + fmt.Sprint(v...) + STOP)
 	os.Exit(0)

@@ -1,12 +1,11 @@
 package handler
 
 import (
+	"../authentification"
 	"../workers/user"
 	"../workers/users"
-	"../authentification"
 	"github.com/gin-gonic/gin"
 )
-
 
 func Handler(router *gin.Engine) {
 	a := router.Group("/authentification")

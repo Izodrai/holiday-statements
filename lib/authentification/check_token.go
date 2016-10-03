@@ -1,10 +1,11 @@
 package authentification
 
 import (
-	"net/http"
 	"../tools"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
+
 /*
  {
 	"user_id": 1,
@@ -14,7 +15,7 @@ import (
 */
 
 func Check_token(c *gin.Context, json *tools.Request) bool {
-	
+
 	if c.BindJSON(json) == nil {
 		if u, ok := tools.Connected_users[json.User_id]; ok {
 			if json.Token == u.Token {

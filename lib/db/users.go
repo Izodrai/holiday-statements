@@ -6,7 +6,6 @@ import (
 )
 
 func Load_users(users map[string]tools.User) error {
-
 	var err error
 	var rows *sql.Rows
 

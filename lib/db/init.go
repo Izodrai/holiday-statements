@@ -46,7 +46,7 @@ architecture_test:
 		var id, login string
 		rows.Scan(&id, &login)
 
-// 		tools.White_info("Login : ", login, " with id : ", id)
+		// 		tools.White_info("Login : ", login, " with id : ", id)
 
 		if login != "admin" || id != "1" {
 			return errors.New("bad values")
