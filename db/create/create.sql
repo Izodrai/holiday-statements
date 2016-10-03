@@ -32,7 +32,7 @@ CREATE TABLE participants (
 
 CREATE TABLE spending_type (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    reference VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE spending (
@@ -53,6 +53,7 @@ CREATE TABLE spending_for (
     spending_id INTEGER,
     debtor_id INTEGER,
     debt REAL,
+    refunded INTEGER,
     FOREIGN KEY(spending_id) REFERENCES spending(id),
     FOREIGN KEY(debtor_id) REFERENCES users(id)
 );
@@ -93,7 +94,7 @@ VALUES
 	(3,1),
 	(4,1);
 	
-INSERT INTO spending_type (id, reference)
+INSERT INTO spending_type (id, name)
 VALUES 
 	(1, "food"),
 	(2, "accommodation");

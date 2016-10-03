@@ -1,35 +1,28 @@
 package main
 
 import (
-	"time"
+	"./lib/db"
 	"./lib/handler"
 	"./lib/tools"
+	"./lib/authentification"
 	"github.com/gin-gonic/gin"
 ) 
 
 func main() {
 	
 	tools.Init_log(true)
+	
+	if err := db.Init_connect_and_db(); err != nil {
+		db.Db_connect.Close()
+		tools.Fatal_error(err)
+	}
 
+	if err := authentification.Init_authenfication(); err != nil {
+		tools.Fatal_error(err)
+	}
+	
 	router := gin.Default()
 
-	tools.Users = make(map[string]tools.User)
-	tools.Users_id = make(map[int64]tools.User)
-	tools.Connected_users = make(map[int64]tools.User)
-	
-	tools.Users["test"]=tools.User{1,"test","a1159e9df3670d549d04524532629f5477ceb7deec9b45e47e8c009506ecb2c8","@",false,[]int64{},"",time.Time{}}
-	tools.Users_id[1]=tools.User{1,"test","a1159e9df3670d549d04524532629f5477ceb7deec9b45e47e8c009506ecb2c8","@",false,[]int64{},"",time.Time{}}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	handler.Handler(router)
 	
 	router.Run(":8080")
