@@ -2,22 +2,41 @@ package handler
 
 import (
 	"../authentification"
-	"../workers/user"
 	"../workers/users"
+	"../workers/events"
 	"github.com/gin-gonic/gin"
 )
 
 func Handler(router *gin.Engine) {
 	a := router.Group("/authentification")
 	{
-		a.POST("/", authentification.Login)
+		a.POST("/login", authentification.Login)
+		a.POST("/logout", authentification.Logout)
 	}
-	u := router.Group("/user")
+	
+	ev := router.Group("/events")
 	{
-		u.POST("/get", user.Get_user_by_id_or_name)
+		ev.POST("/get/all/all", events.Get_all)
+		ev.POST("/get/all/active", events.Get_all_active)
+		ev.POST("/get/all/deactivate", events.Get_all_deactivate)
+		ev.POST("/get/all/archive", events.Get_all_archive)
+		
+		ev.POST("/add", events.Add)
+		ev.POST("/get/one/:event_id", events.Get)
+		ev.POST("/update/:event_id", events.Update)
+		ev.POST("/deactivate/:event_id", events.Deactivate)
+		
+		ev.POST("/participant/add/:event_id", events.Add_participant)
+		ev.POST("/participant/del/:event_id", events.Del_participant)
+		
+		ev.POST("/spending/add/:event_id", events.Add_spending)
+		ev.POST("/spending/del/:event_id", events.Del_spending)
+		ev.POST("/spending/update/:event_id", events.Update_spending)
 	}
+	
 	us := router.Group("/users")
 	{
-		us.POST("/get_connected", users.Get_connected_users)
+		us.POST("/search", users.Search)
+		us.POST("/get/connected", users.Get_connected)
 	}
 }

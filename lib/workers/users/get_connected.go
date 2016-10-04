@@ -14,11 +14,11 @@ import (
 * curl -i -X POST -d '{"user_id":<1>, "token":"<token>"}' http://localhost:8080/users/get_connected
 ****/
 
-func Get_connected_users(c *gin.Context) {
+func Get_connected(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json) {
+	if !authentification.Check_token(c, &json, true) {
 		return
 	}
 

@@ -1,4 +1,4 @@
-package user
+package users
 
 import (
 	"../../authentification"
@@ -8,15 +8,15 @@ import (
 )
 
 /****
-* http://localhost:8080/user/get
-* curl -i -X POST -d '{"user_id":<1>, "token":"<token>", "data": <3 or "name"> }' http://localhost:8080/user/get
+* http://localhost:8080/users/get
+* curl -i -X POST -d '{"user_id":<1>, "token":"<token>", "data": <3 or "name"> }' http://localhost:8080/users/get
 ****/
 
-func Get_user_by_id_or_name(c *gin.Context) {
+func Search(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json) {
+	if !authentification.Check_token(c, &json, false) {
 		return
 	}
 
