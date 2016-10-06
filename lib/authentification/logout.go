@@ -14,7 +14,7 @@ import (
 func Logout(c *gin.Context) {
 	var json tools.Request
 
-	if !Check_token(c, &json, false) {
+	if !Check_token_and_json(c, &json, false) {
 		return
 	}
 	

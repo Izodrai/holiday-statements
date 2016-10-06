@@ -17,7 +17,7 @@ func Search(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 

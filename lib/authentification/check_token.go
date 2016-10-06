@@ -4,11 +4,26 @@ import (
 	"../tools"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"unicode/utf8"
 )
 
-func Check_token(c *gin.Context, json *tools.Request, need_admin bool) bool {
+func Check_token_and_json(c *gin.Context, json *tools.Request, need_admin bool) bool {
 	
 	if c.BindJSON(json) == nil {
+		
+		if json.Data != nil {
+			switch t := json.Data.(type) {
+				case string:
+					if !utf8.Valid([]byte(t)) {
+						c.JSON(http.StatusForbidden, gin.H{
+							"code":  http.StatusForbidden,
+							"msg": "invalid format you not transmit utf8",
+						})
+						return false
+					}
+			}
+		}
+		
 		if u, ok := tools.Connected_users[json.User_id]; ok {
 			if json.Token == u.Token {
 				

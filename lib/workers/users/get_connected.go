@@ -18,7 +18,7 @@ func Get_connected(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, true) {
+	if !authentification.Check_token_and_json(c, &json, true) {
 		return
 	}
 

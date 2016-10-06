@@ -11,7 +11,7 @@ func Get_all(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -25,7 +25,7 @@ func Get_all_active(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -39,7 +39,7 @@ func Get_all_deactivate(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -53,7 +53,7 @@ func Get_all_archive(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -67,7 +67,7 @@ func Add(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -81,7 +81,7 @@ func Get(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -95,7 +95,7 @@ func Update(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -109,7 +109,7 @@ func Deactivate(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -123,7 +123,7 @@ func Add_participant(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -137,7 +137,7 @@ func Del_participant(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -151,7 +151,7 @@ func Add_spending(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -165,7 +165,7 @@ func Del_spending(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -179,7 +179,7 @@ func Update_spending(c *gin.Context) {
 
 	var json tools.Request
 
-	if !authentification.Check_token(c, &json, false) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
