@@ -12,14 +12,14 @@ var Admins map[string]User
 var Connected_users map[int64]User
 
 type User struct {
-	Id              int64
-	Login           string
-	Password        string
-	Email           string
-	Admin           bool
-	Friends         []int64
-	Token           string
-	Last_activity time.Time
+	Id              int64		`json:"id,omitempty"`
+	Login           string		`json:"login,omitempty"`
+	Password        string		`json:"password,omitempty"`
+	Email           string		`json:"email,omitempty"`
+	Admin           bool		`json:"admin,omitempty"`
+	Friends         []int64		`json:"friends,omitempty"`
+	Token           string		`json:"token,omitempty"`
+	Last_activity   time.Time	`json:"last_activity,omitempty"`
 }
 
 type Request struct {
@@ -38,6 +38,15 @@ func Crypt_sha256(to_hash string) string {
 	s := sha256.Sum256([]byte(to_hash))
 
 	return fmt.Sprintf("%x", s)
+}
+
+func (u *User) Clean_max_for_send() {
+	u.Password = ""
+	u.Email = ""
+	u.Admin = false
+	u.Friends = []int64{}
+	u.Token = ""
+	u.Last_activity = time.Time{}
 }
 
 func (u *User) Update_activity() {

@@ -25,9 +25,7 @@ func Get_connected(c *gin.Context) {
 	var cus []tools.User
 
 	for _, cu := range tools.Connected_users {
-		cu.Email = ""
-		cu.Password = ""
-		cu.Token = ""
+		cu.Clean_max_for_send()
 		cus = append(cus, cu)
 	}
 
