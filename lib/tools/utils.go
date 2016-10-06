@@ -11,6 +11,8 @@ var Users_id map[int64]User
 var Admins map[string]User
 var Connected_users map[int64]User
 
+var Friends map[int64][]int64
+
 type User struct {
 	Id              int64		`json:"id,omitempty"`
 	Login           string		`json:"login,omitempty"`
@@ -40,7 +42,7 @@ func Crypt_sha256(to_hash string) string {
 	return fmt.Sprintf("%x", s)
 }
 
-func (u *User) Clean_max_for_send() {
+func (u *User) Clean_for_send() {
 	u.Password = ""
 	u.Email = ""
 	u.Admin = false

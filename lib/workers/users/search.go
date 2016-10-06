@@ -46,7 +46,7 @@ func Search(c *gin.Context) {
 	}
 
 	if u.Id != 0 {
-		u.Clean_max_for_send()
+		u.Clean_for_send()
 
 		c.JSON(http.StatusOK, gin.H{
 			"user": u,

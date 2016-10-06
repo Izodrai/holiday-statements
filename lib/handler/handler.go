@@ -38,5 +38,8 @@ func Handler(router *gin.Engine) {
 	{
 		us.POST("/search", users.Search)
 		us.POST("/get/connected", users.Get_connected)
+		
+		us.POST("/get/all", users.Get_all)
+		us.POST("/friends/get/all", users.Friends_get_all)
 	}
 }

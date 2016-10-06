@@ -10,11 +10,11 @@ import (
 )
 
 /****
-* http://localhost:8080/users/get/connected
-* curl -i -X POST -d '{"user_id":<1>, "token":"<token>"}' http://localhost:8080/users/get/connected
+* http://localhost:8080/users/get/all
+* curl -i -X POST -d '{"user_id":<1>, "token":"<token>"}' http://localhost:8080/users/get/all
 ****/
 
-func Get_connected(c *gin.Context) {
+func Get_all(c *gin.Context) {
 
 	var json tools.Request
 
@@ -24,9 +24,9 @@ func Get_connected(c *gin.Context) {
 
 	var us []tools.User
 
-	for _, cu := range tools.Connected_users {
-		cu.Clean_for_send()
-		us = append(us, cu)
+	for _, u := range tools.Users {
+		u.Clean_for_send()
+		us = append(us, u)
 	}
 	
 	if len(us) != 0 {

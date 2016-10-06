@@ -5,7 +5,7 @@ import (
 	"database/sql"
 )
 
-func Load_users(users map[string]tools.User) error {
+func load_users(users map[string]tools.User) error {
 	var err error
 	var rows *sql.Rows
 

@@ -11,9 +11,12 @@ import (
 
 var Db_connect *sql.DB
 
-func Init_connect_and_db() error {
+func Init_db_connect() error {
 
-	os.Remove("./db/save/spending.db") // to remove
+	//////////////////////////////////
+	// to remove
+	os.Remove("./db/save/spending.db")
+	//////////////////////////////////
 
 	var err error
 	var rows *sql.Rows
@@ -55,5 +58,23 @@ architecture_test:
 
 	tools.Green_info("sqlite ready")
 
+	return nil
+}
+
+func Init_system() error {
+	if err := load_users(tools.Users); err != nil {
+		return err
+	}
+	
+	for login, user := range tools.Users {
+		tools.Users_id[user.Id] = user
+		if user.Admin {
+			tools.Admins[login] = user
+		}
+	}
+	
+	if err := load_friends(tools.Friends); err != nil {
+		return err
+	}
 	return nil
 }

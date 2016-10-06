@@ -123,3 +123,8 @@ VALUES
 	(5, 2, 318.09),
 	(5, 3, 318.09),
 	(5, 4, 318.09);
+	
+INSERT INTO friends (user_id_1, user_id_2)
+VALUES 
+	(1, 2),
+	(1, 3);

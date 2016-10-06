@@ -1,7 +1,6 @@
 package main
 
 import (
-	"./lib/authentification"
 	"./lib/db"
 	"./lib/handler"
 	"./lib/tools"
@@ -9,18 +8,25 @@ import (
 )
 
 func main() {
-
+	
 	tools.Init_log(true)
-
-	if err := db.Init_connect_and_db(); err != nil {
+	
+	tools.Users = make(map[string]tools.User)
+	tools.Users_id = make(map[int64]tools.User)
+	tools.Connected_users = make(map[int64]tools.User)
+	tools.Admins = make(map[string]tools.User)
+	tools.Friends = make(map[int64][]int64)
+	
+	if err := db.Init_db_connect(); err != nil {
 		db.Db_connect.Close()
 		tools.Fatal_error(err)
 	}
-
-	if err := authentification.Init_authenfication(); err != nil {
+	defer db.Db_connect.Close()
+	
+	if err := db.Init_system(); err != nil {
 		tools.Fatal_error(err)
 	}
-
+	
 	router := gin.Default()
 
 	handler.Handler(router)
