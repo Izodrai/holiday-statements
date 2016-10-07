@@ -21,7 +21,7 @@ func Friends_get_all(c *gin.Context) {
 	var json tools.Request
 	var my_friends_ids []int64
 
-	if !authentification.Check_token_and_json(c, &json, true) {
+	if !authentification.Check_token_and_json(c, &json, false) {
 		return
 	}
 
@@ -32,19 +32,19 @@ func Friends_get_all(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	for _, friend_id := range my_friends_ids {
 		if my_friend, ok := tools.Users_id[friend_id]; ok {
 			my_friend.Clean_for_send()
 			us = append(us, my_friend)
 		}
 	}
-	
+
 	if len(us) != 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"users": us,
 			"code":  http.StatusOK,
-			"msg":   "users found",
+			"msg":   "friends found",
 		})
 		return
 	} else {
