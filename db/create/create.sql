@@ -4,6 +4,7 @@ CREATE TABLE users (
     pwd   VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     rights INTEGER,
+    active INTEGER,
     UNIQUE (login),
     UNIQUE (email)
 );
@@ -72,19 +73,19 @@ CREATE TABLE debts (
 
 
 
-INSERT INTO users (id, login, pwd, email, rights) 
+INSERT INTO users (id, login, pwd, email, rights, active)
 VALUES
-	(1, "admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "admin@mydomain.country", 1),
-	(2, "user1", "0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90", "users1@mydomain.country", 0),
-	(3, "user2", "6025d18fe48abd45168528f18a82e265dd98d421a7084aa09f61b341703901a3", "users2@mydomain.country", 0),
-	(4, "user3", "5860faf02b6bc6222ba5aca523560f0e364ccd8b67bee486fe8bf7c01d492ccb", "users3@mydomain.country", 0);
-	
+	(1, "admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "admin@mydomain.country", 1, 1),
+	(2, "user1", "0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90", "users1@mydomain.country", 0, 1),
+	(3, "user2", "6025d18fe48abd45168528f18a82e265dd98d421a7084aa09f61b341703901a3", "users2@mydomain.country", 0, 1),
+	(4, "user3", "5860faf02b6bc6222ba5aca523560f0e364ccd8b67bee486fe8bf7c01d492ccb", "users3@mydomain.country", 0, 1);
+
 INSERT INTO events (id, reference, created_at, promoter_id)
-VALUES 
+VALUES
 	(1,"holidays in Barcelona !", 1440414793, 1),
 	(2,"picnic at user2", 1472062820, 1),
 	(3,"camping paradise", 1472070142, 2);
-	
+
 INSERT INTO participants (user_id, event_id)
 VALUES
 	(1,1),
@@ -93,22 +94,22 @@ VALUES
 	(2,3),
 	(3,1),
 	(4,1);
-	
+
 INSERT INTO spending_types (id, name)
-VALUES 
+VALUES
 	(1, "food"),
 	(2, "accommodation");
-	
+
 INSERT INTO spending (id, event_id, type_id, description, amount, spending_at, created_at, payer_id)
-VALUES 
+VALUES
 	(1, 1, 1, "beers", 12.35, 1440416501, 1440416502, 1),
 	(2, 1, 2, "camping", 350.10, 1440436501, 1440436502, 1),
 	(3, 1, 2, "food", 35, 1440436501, 1440436502, 3),
 	(4, 1, 2, "resto", 43.53, 1440436501, 1440436502, 4),
 	(5, 1, 2, "hotel", 954.27, 1440436501, 1440436502, 4);
-	
+
 INSERT INTO spending_for (spending_id, debtor_id, debt)
-VALUES 
+VALUES
 	(1, 1, 6.175),
 	(1, 2, 6.175),
 	(2, 1, 87.525),
@@ -123,8 +124,8 @@ VALUES
 	(5, 2, 318.09),
 	(5, 3, 318.09),
 	(5, 4, 318.09);
-	
+
 INSERT INTO friends (user_id_1, user_id_2)
-VALUES 
+VALUES
 	(1, 2),
 	(1, 3);
