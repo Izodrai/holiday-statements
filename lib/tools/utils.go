@@ -9,6 +9,7 @@ import (
 var Users map[string]User
 var Users_id map[int64]User
 var Admins map[string]User
+var Admins_id map[int64]User
 var Connected_users map[int64]User
 
 var Friends map[int64][]int64
@@ -52,28 +53,23 @@ func (u *User) Clean_for_send() {
 }
 
 func (u *User) Update_activity() {
-	
+
 	u.Last_activity = time.Now()
-	
+
 	if u2, ok := Connected_users[u.Id]; ok {
 		u2.Last_activity = u.Last_activity
 		Connected_users[u2.Id] = u2
 	} else {
 		Connected_users[u.Id] = *u
 	}
-	
+
 	if u2, ok := Users_id[u.Id]; ok {
 		u2.Last_activity = u.Last_activity
 		Users_id[u2.Id] = u2
 	}
-	
+
 	if u2, ok := Users[u.Login]; ok {
 		u2.Last_activity = u.Last_activity
 		Users[u2.Login] = u2
-	}
-	
-	if u2, ok := Admins[u.Login]; ok {
-		u2.Last_activity = u.Last_activity
-		Admins[u2.Login] = u2
 	}
 }

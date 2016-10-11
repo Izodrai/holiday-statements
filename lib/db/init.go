@@ -71,6 +71,7 @@ func Init_system() error {
 		tools.Users_id[user.Id] = user
 		if user.Admin {
 			tools.Admins[login] = user
+			tools.Admins_id[user.Id] = user
 		}
 	}
 
