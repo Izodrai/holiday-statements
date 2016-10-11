@@ -7,6 +7,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"os"
 	"strings"
+	"github.com/izodrai/utils/logs"
 )
 
 var Db_connect *sql.DB
@@ -26,18 +27,18 @@ func Init_db_connect() error {
 		return err
 	}
 
-	tools.Green_info("sqlite connected")
+	logs.Green_info("sqlite connected")
 
 architecture_test:
 
 	rows, err = Db_connect.Query("select id, login from users limit 1")
 	if err != nil {
 		if strings.Contains(err.Error(), "no such table: users") {
-			tools.Info("sqlite empty, we need to feed it!")
+			logs.Info("sqlite empty, we need to feed it!")
 			if err = CreateDatabase(); err != nil {
 				return err
 			}
-			tools.Info("sqlite generated")
+			logs.Info("sqlite generated")
 			goto architecture_test
 		} else {
 			return err
@@ -56,7 +57,7 @@ architecture_test:
 		}
 	}
 
-	tools.Green_info("sqlite ready")
+	logs.Green_info("sqlite ready")
 
 	return nil
 }
@@ -65,14 +66,14 @@ func Init_system() error {
 	if err := load_users(tools.Users); err != nil {
 		return err
 	}
-	
+
 	for login, user := range tools.Users {
 		tools.Users_id[user.Id] = user
 		if user.Admin {
 			tools.Admins[login] = user
 		}
 	}
-	
+
 	if err := load_friends(tools.Friends); err != nil {
 		return err
 	}
