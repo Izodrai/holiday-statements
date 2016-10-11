@@ -6,11 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"../../db"
+	"github.com/izodrai/utils/logs"
 )
 
 /****
 * http://localhost:8080/users/add
 * curl -i -X POST -d '{"user_id":<1>, "token":"<token>", "data":{"login":"user4","password":"user4","email":"user4@memail.com"}}' http://localhost:8080/users/add
+* all fields are mandatory
 ****/
 
 func Add(c *gin.Context) {
@@ -35,10 +37,26 @@ func Add(c *gin.Context) {
 		return
 	}
 
-	if new_user.Login == "" || len(new_user.Login) <= 4 || new_user.Password == "" || len(new_user.Password) <= 4 || new_user.Email == "" || len(new_user.Email) <= 4 {
+	if new_user.Login == "" || len(new_user.Login) <= 4 {
 		c.JSON(http.StatusOK, gin.H{
 			"code": http.StatusBadRequest,
-			"msg":  "empty login / email / password or len < 4",
+			"msg":  "empty login or len < 4",
+		})
+		return
+	}
+
+	if new_user.Password == "" || len(new_user.Password) <= 4 {
+		c.JSON(http.StatusOK, gin.H{
+			"code": http.StatusBadRequest,
+			"msg":  "empty password or len < 4",
+		})
+		return
+	}
+
+	if new_user.Email == "" || len(new_user.Email) <= 4 {
+		c.JSON(http.StatusOK, gin.H{
+			"code": http.StatusBadRequest,
+			"msg":  "empty email or len < 4",
 		})
 		return
 	}
@@ -54,7 +72,7 @@ func Add(c *gin.Context) {
 	new_user.Password = tools.Crypt_sha256(new_user.Password)
 
 	if err := db.Create_user(&new_user); err != nil {
-		tools.Error(err)
+		logs.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code": http.StatusInternalServerError,
 			"msg":  "Error during user insertion",
