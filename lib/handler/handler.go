@@ -43,6 +43,8 @@ func Handler(router *gin.Engine) {
 
 		us.POST("/get/all", users.Get_all)
 		us.POST("/friends/get/all", users.Friends_get_all)
+		us.POST("/friends/add", users.Friends_add)
+		// us.POST("/friends/delete", users.Friends_delete)
 
 		us.POST("/update/password", users.Update_password)
 		us.POST("/update/email", users.Update_email)

@@ -58,7 +58,22 @@ func load_friends(friends map[int64][]int64) error {
 	return nil
 }
 
-func add_friend() error {
+func Add_friend(user_id_1, user_id_2 int64) error {
+
+	_, err := Db_connect.Exec("INSERT INTO friends (user_id_1, user_id_2) VALUES (?,?)", user_id_1, user_id_2)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Del_friend(user_id_1, user_id_2 int64) error {
+
+	_, err := Db_connect.Exec("DELETE FROM friends WHERE user_id_1 = ? AND user_id_2 = ?", user_id_1, user_id_2)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
