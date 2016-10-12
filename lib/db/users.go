@@ -43,3 +43,13 @@ func Create_user(new_user *tools.User) error {
 	}
 	return nil
 }
+
+func Update_user_password(user_to_update *tools.User) error {
+
+	_, err := Db_connect.Exec("UPDATE users SET pwd = ? WHERE id = ?", user_to_update.Password, user_to_update.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
