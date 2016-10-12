@@ -3,7 +3,6 @@ package main
 import (
 	"./lib/db"
 	"./lib/handler"
-	"./lib/tools"
 	"github.com/gin-gonic/gin"
 	"github.com/izodrai/utils/logs"
 )
@@ -11,12 +10,6 @@ import (
 func main() {
 
 	logs.Init_log(true)
-
-	tools.Users = make(map[string]tools.User)
-	tools.Users_id = make(map[int64]tools.User)
-	tools.Connected_users = make(map[int64]tools.User)
-	tools.Admins = make(map[string]tools.User)
-	tools.Friends = make(map[int64][]int64)
 
 	if err := db.Init_db_connect(); err != nil {
 		db.Db_connect.Close()

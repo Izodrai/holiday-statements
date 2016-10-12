@@ -63,6 +63,14 @@ architecture_test:
 }
 
 func Init_system() error {
+
+	tools.Users = make(map[string]tools.User)
+	tools.Users_id = make(map[int64]tools.User)
+	tools.Connected_users = make(map[int64]tools.User)
+	tools.Admins = make(map[string]tools.User)
+	tools.Admins_id = make(map[int64]tools.User)
+	tools.Friends = make(map[int64][]int64)
+
 	if err := load_users(tools.Users); err != nil {
 		return err
 	}
