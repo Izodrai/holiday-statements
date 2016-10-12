@@ -53,3 +53,13 @@ func Update_user_password(user_to_update *tools.User) error {
 
 	return nil
 }
+
+func Update_user_email(user_to_update *tools.User) error {
+
+	_, err := Db_connect.Exec("UPDATE users SET email = ? WHERE id = ?", user_to_update.Email, user_to_update.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
