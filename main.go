@@ -10,7 +10,7 @@ import (
 	auth "github.com/abbot/go-http-auth"
 	"log"
 	"net/http"
-) 
+)
 
 func main() {
 
@@ -25,7 +25,7 @@ func main() {
 	if err := localAuth.Init(); err != nil {
 		tools.FatalError(err)
 	}
-	
+
 	userAuth := auth.NewBasicAuthenticator("Current Authentication", localAuth.UserSecret)
 	adminAuth := auth.NewBasicAuthenticator("Admin Authentication", localAuth.AdminSecret)
 
@@ -39,5 +39,5 @@ func main() {
 
 	tools.Info("Working")
 
-	log.Fatal(http.ListenAndServe(":80", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
