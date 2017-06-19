@@ -18,7 +18,7 @@ func Init() error {
 	var err error
 	var rows *sql.Rows
 
-	DbConnect, err = sql.Open("sqlite3", "./db/save/spending.db")
+	DbConnect, err = sql.Open("sqlite3", "/home/vp/holi/v2/db/save/spending.db")
 	if err != nil {
 		return err
 	}
