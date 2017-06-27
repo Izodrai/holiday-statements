@@ -48,31 +48,9 @@ func InitLog(d bool) {
 	loggerDebug = log.New(logDisplay, CYAN+"DEBUG   ", logMode)
 }
 
-/*
- * Func for display Error, Debug and Info
- *
-	tools.PrintlnDebug("test")
- *
-	tools.PrintlnError("test")
- *
-	tools.PrintlnInfo("test")
- *
-	tools.PrintlnGreenInfo("test")
- *
-	tools.PrintlnBlueInfo("test")
- *
-	tools.PrintlnYellowInfo("test")
- *
-	tools.PrintlnPurpleInfo("test")
- *
-	tools.PrintlnWhiteInfo("test")
- *
-	tools.PrintlnCyanInfo("test")
-*/
-
 func FatalError(v ...interface{}) {
 	loggerError.Println(RED + fmt.Sprint(v...) + STOP)
-	os.Exit(0)
+	os.Exit(1)
 }
 func Error(v ...interface{}) {
 	loggerError.Println(RED + fmt.Sprint(v...) + STOP)

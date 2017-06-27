@@ -1,0 +1,5 @@
+{
+  "save_db":"/home/vp/develop/self/go/holiday-statements/db/save/spending.db",
+  "log_file":"/home/vp/develop/self/go/holiday-statements/holi.log",
+  "tpl_folder":"/home/vp/develop/self/go/holiday-statements/lib/templates"
+}
