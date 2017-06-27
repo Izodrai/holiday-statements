@@ -8,20 +8,20 @@ import (
 )
 
 func List(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
-	
+
 	nav := tools.GenerateNav(r.Username)
-	
-	var users []tools.User 
-	var admins []tools.User 
-	
+
+	var users []tools.User
+	var admins []tools.User
+
 	for _, user := range tools.Users {
 		users = append(users, user)
 	}
-	
+
 	for _, user := range tools.Admins {
 		admins = append(admins, user)
 	}
-	
+
 	info := struct {
 		Title string
 		Nav   []string
@@ -34,5 +34,5 @@ func List(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Admins: admins,
 	}
 
-	tmpl.TemplateMe(w, r, "lib/templates/admin/users/list.html", info)
+	tmpl.TemplateMe(w, r, "admin/users/list.html", info)
 }

@@ -9,9 +9,9 @@ import (
 )
 
 func List(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
-	
+
 	var user tools.User
-	
+
 	info := struct {
 		Title        string
 		Nav          []string
@@ -21,13 +21,13 @@ func List(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Nav: tools.GenerateNav(r.Username),
 		Events: []tools.Event{},
 	}
-	
+
 	user, _ = tools.Users[r.Username]
 	if err := db.LoadEventsForThisUser(&user, &info.Events); err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
 		return
 	}
-	
-	tmpl.TemplateMe(w, r, "lib/templates/events/list.html", info)
+
+	tmpl.TemplateMe(w, r, "events/list.html", info)
 }

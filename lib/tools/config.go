@@ -5,27 +5,27 @@ import (
 	"encoding/json"
 )
 
-type Config struct {
+type config struct {
   SaveDB string `json:"save_db"`
   LogFile string `json:"log_file"`
 	TemplateFolder string `json:"tpl_folder"`
 }
 
-func LoadConfig(filename string) (Config, error) {
+var Config config
 
-  var config Config
+func LoadConfig(filename string) error {
 
   file, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return Config{}, err
+		return err
 	}
 
-  err = json.Unmarshal(file, &config)
+  err = json.Unmarshal(file, &Config)
 
 	if err != nil {
-		return Config{}, err
+		return err
 	}
 
-  return config, nil
+  return nil
 
 }

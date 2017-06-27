@@ -11,9 +11,9 @@ import (
 )
 
 func Add(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
-	
+
 	var err error
-	
+
 	info := struct {
 		Title        string
 		Nav          []string
@@ -31,44 +31,44 @@ func Add(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		Error: false,
 		ErrorMsg: "",
 	}
-	
+
 	var users = make(map[string]tools.User)
-	
+
 	if err = db.LoadUsers(users); err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
 		return
 	}
-	
+
 	for _,user := range users {
 		info.Users = append(info.Users, user)
 	}
-	
+
 	if info.Added, err = addEvent(r, &info.Event, info.Users); err != nil {
 		tools.Error(err)
 		tmpl.Template500(w, r)
 		return
 	}
 
-	tmpl.TemplateMe(w, r, "lib/templates/events/add.html", info)
+	tmpl.TemplateMe(w, r, "events/add.html", info)
 }
 
 func addEvent(r *auth.AuthenticatedRequest, ev *tools.Event, users []tools.User) (bool, error) {
-	
+
 	var err error
-	
+
 	if addEv := r.PostFormValue("addEv"); addEv == "" {
 		return false, nil
 	} else if addEv != "Ajouter" {
 		return false, errors.New("bad entry for addEv -> "+addEv)
 	}
-	
+
 	if name := r.PostFormValue("name"); name == "" {
 		return false, nil /*errors.New("bad entry for amount*/
 	} else {
 		ev.Reference = name
 	}
-	
+
 	if allParticipant := r.PostFormValue("allParticipant"); allParticipant == "on" {
 		for _, user := range users {
 			ev.Participants = append(ev.Participants, user)
@@ -82,14 +82,14 @@ func addEvent(r *auth.AuthenticatedRequest, ev *tools.Event, users []tools.User)
 	}
 	promoter := tools.Users[r.Username]
 	ev.PromoterId = promoter.Id
-	
+
 	if len(ev.Participants) == 0 {
 		return false, nil
 	}
-	
+
 	if err = db.AddThisEvent(ev); err != nil {
 		return false, err
 	}
-	
+
 	return true, nil
 }

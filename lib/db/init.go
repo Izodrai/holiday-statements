@@ -11,14 +11,14 @@ import (
 
 var DbConnect *sql.DB
 
-func Init(config tools.Config) error {
+func Init() error {
 
 // 	os.Remove("./db/save/spending.db") // to remove
 
 	var err error
 	var rows *sql.Rows
 
-	DbConnect, err = sql.Open("sqlite3", config.SaveDB)
+	DbConnect, err = sql.Open("sqlite3", tools.Config.SaveDB)
 	if err != nil {
 		return err
 	}

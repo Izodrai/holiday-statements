@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/cheggaaa/pb"
 	"log"
+	"syscall"
 	"os"
 )
 
@@ -36,16 +37,26 @@ var debug bool
 /*
  * Func for init log
  */
-func InitLog(d bool) {
+func InitLog(d bool) error {
 
 	debug = d
+
+	fLog, err := os.OpenFile(Config.LogFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+		return err
+	}
+  syscall.Dup2(int(fLog.Fd()), 1) /* -- stdout */
+
 	logDisplay = os.Stdout
+
 	logMode := log.Ldate | log.Ltime
 
 	loggerInfo = log.New(logDisplay, "INFO    ", logMode)
 	loggerError = log.New(logDisplay, RED+"ERROR   ", logMode)
 	loggerWarning = log.New(logDisplay, YELLOW+"WARNING ", logMode)
 	loggerDebug = log.New(logDisplay, CYAN+"DEBUG   ", logMode)
+
+	return nil
 }
 
 func FatalError(v ...interface{}) {

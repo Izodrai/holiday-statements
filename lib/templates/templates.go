@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"path"
 	"../tools"
 	"github.com/abbot/go-http-auth"
 	"html/template"
@@ -8,7 +9,7 @@ import (
 )
 
 func TemplateMe(w http.ResponseWriter, r *auth.AuthenticatedRequest, page string, info interface{}) {
-	tmpl, err := template.ParseFiles(page)
+	tmpl, err := template.ParseFiles(path.Join(tools.Config.TemplateFolder,page))
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -21,7 +22,7 @@ func TemplateMe(w http.ResponseWriter, r *auth.AuthenticatedRequest, page string
 }
 
 func Template500(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
-	tmpl, err := template.ParseFiles("lib/templates/500/500.html")
+	tmpl, err := template.ParseFiles(path.Join(tools.Config.TemplateFolder,"/500/500.html"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		tools.FatalError(err.Error())
