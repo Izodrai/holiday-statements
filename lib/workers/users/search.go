@@ -29,7 +29,7 @@ func Search(c *gin.Context) {
 			u = sU
 		} else {
 			for _, sU := range tools.Users {
-				if strings.Replace(strings.ToLower(t)," ","",-1) == sU.Email {
+				if strings.Replace(strings.ToLower(t), " ", "", -1) == sU.Email {
 					u = sU
 					break
 				}

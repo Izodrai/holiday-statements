@@ -17,15 +17,15 @@ func Logout(c *gin.Context) {
 	if !Check_token_and_json(c, &json, false) {
 		return
 	}
-	
+
 	u, _ := tools.Connected_users[json.User_id]
-	
+
 	u.Update_activity()
 
 	delete(tools.Connected_users, json.User_id)
-	
+
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "you have been disconnected",
+		"code": http.StatusOK,
+		"msg":  "you have been disconnected",
 	})
 }

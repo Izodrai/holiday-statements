@@ -16,8 +16,8 @@ func Get_all(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Get_all",
+		"code": http.StatusOK,
+		"msg":  "events.Get_all",
 	})
 }
 
@@ -30,8 +30,8 @@ func Get_all_active(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Get_all_active",
+		"code": http.StatusOK,
+		"msg":  "events.Get_all_active",
 	})
 }
 
@@ -44,8 +44,8 @@ func Get_all_deactivate(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Get_all_deactivate",
+		"code": http.StatusOK,
+		"msg":  "events.Get_all_deactivate",
 	})
 }
 
@@ -58,8 +58,8 @@ func Get_all_archive(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Get_all_archive",
+		"code": http.StatusOK,
+		"msg":  "events.Get_all_archive",
 	})
 }
 
@@ -72,8 +72,8 @@ func Add(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Add",
+		"code": http.StatusOK,
+		"msg":  "events.Add",
 	})
 }
 
@@ -86,8 +86,8 @@ func Get(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Get",
+		"code": http.StatusOK,
+		"msg":  "events.Get",
 	})
 }
 
@@ -100,8 +100,8 @@ func Update(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Update",
+		"code": http.StatusOK,
+		"msg":  "events.Update",
 	})
 }
 
@@ -114,8 +114,8 @@ func Deactivate(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Deactivate",
+		"code": http.StatusOK,
+		"msg":  "events.Deactivate",
 	})
 }
 
@@ -128,8 +128,8 @@ func Add_participant(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Add_participant",
+		"code": http.StatusOK,
+		"msg":  "events.Add_participant",
 	})
 }
 
@@ -142,8 +142,8 @@ func Del_participant(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Del_participant",
+		"code": http.StatusOK,
+		"msg":  "events.Del_participant",
 	})
 }
 
@@ -156,8 +156,8 @@ func Add_spending(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Add_spending",
+		"code": http.StatusOK,
+		"msg":  "events.Add_spending",
 	})
 }
 
@@ -170,8 +170,8 @@ func Del_spending(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Del_spending",
+		"code": http.StatusOK,
+		"msg":  "events.Del_spending",
 	})
 }
 
@@ -184,7 +184,7 @@ func Update_spending(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  http.StatusOK,
-		"msg":   "events.Update_spending",
+		"code": http.StatusOK,
+		"msg":  "events.Update_spending",
 	})
 }

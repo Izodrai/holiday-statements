@@ -2,13 +2,14 @@ package users
 
 import (
 	"../../authentification"
+	"../../db"
 	"../../tools"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"../../db"
 	"github.com/izodrai/utils/logs"
+	"net/http"
 	"strconv"
 )
+
 /****
 * http://localhost:8080/users/update/pwd
 * curl -i -X POST -d '{"user_id":<1>, "token":"<token>", "data":{"user_to_update":"<1>","old_password":"admin","new_password":"new_admin"}}' http://localhost:8080/users/update/password
@@ -16,7 +17,7 @@ import (
 
 func Update_password(c *gin.Context) {
 
-  var json tools.Request
+	var json tools.Request
 
 	if !authentification.Check_token_and_json(c, &json, false) {
 		return
@@ -25,10 +26,10 @@ func Update_password(c *gin.Context) {
 	var err error
 	var ok, admin bool
 	var user_to_update tools.User
-  var user_id_to_update int64
-  var s_user_id, old_password, new_password string
+	var user_id_to_update int64
+	var s_user_id, old_password, new_password string
 
-  switch t := json.Data.(type) {
+	switch t := json.Data.(type) {
 	case map[string]interface{}:
 		s_user_id = t["user_to_update"].(string)
 		old_password = t["old_password"].(string)
@@ -60,8 +61,8 @@ func Update_password(c *gin.Context) {
 	if json.User_id != user_id_to_update {
 		if _, ok := tools.Admins_id[json.User_id]; !ok {
 			c.JSON(http.StatusForbidden, gin.H{
-				"code":  http.StatusForbidden,
-				"msg": "invalid rights, you are not allowed to update the password of an another user",
+				"code": http.StatusForbidden,
+				"msg":  "invalid rights, you are not allowed to update the password of an another user",
 			})
 			return
 		}
@@ -70,8 +71,8 @@ func Update_password(c *gin.Context) {
 
 	if user_to_update, ok = tools.Users_id[user_id_to_update]; !ok {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"code":  http.StatusBadRequest,
-			"msg": "this user cannot be updated because he not exist",
+			"code": http.StatusBadRequest,
+			"msg":  "this user cannot be updated because he not exist",
 		})
 		return
 	}

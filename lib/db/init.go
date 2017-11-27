@@ -4,10 +4,10 @@ import (
 	"../tools"
 	"database/sql"
 	"errors"
+	"github.com/izodrai/utils/logs"
 	_ "github.com/mattn/go-sqlite3"
 	"os"
 	"strings"
-	"github.com/izodrai/utils/logs"
 )
 
 var Db_connect *sql.DB

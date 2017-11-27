@@ -28,7 +28,7 @@ func Get_all(c *gin.Context) {
 		u.Clean_for_send()
 		us = append(us, u)
 	}
-	
+
 	if len(us) != 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"users": us,

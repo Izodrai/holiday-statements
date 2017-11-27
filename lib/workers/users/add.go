@@ -2,11 +2,11 @@ package users
 
 import (
 	"../../authentification"
+	"../../db"
 	"../../tools"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"../../db"
 	"github.com/izodrai/utils/logs"
+	"net/http"
 )
 
 /****

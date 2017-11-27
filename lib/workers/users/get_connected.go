@@ -28,7 +28,7 @@ func Get_connected(c *gin.Context) {
 		cu.Clean_for_send()
 		us = append(us, cu)
 	}
-	
+
 	if len(us) != 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"users": us,

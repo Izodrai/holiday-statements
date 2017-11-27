@@ -2,8 +2,8 @@ package handler
 
 import (
 	"../authentification"
-	"../workers/users"
 	"../workers/events"
+	"../workers/users"
 	"github.com/gin-gonic/gin"
 )
 

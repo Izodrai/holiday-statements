@@ -15,14 +15,14 @@ var Connected_users map[int64]User
 var Friends map[int64][]int64
 
 type User struct {
-	Id              int64		`json:"id,omitempty"`
-	Login           string		`json:"login,omitempty"`
-	Password        string		`json:"password,omitempty"`
-	Email           string		`json:"email,omitempty"`
-	Admin           bool		`json:"admin,omitempty"`
-	Friends         []int64		`json:"friends,omitempty"`
-	Token           string		`json:"token,omitempty"`
-	Last_activity   time.Time	`json:"last_activity,omitempty"`
+	Id            int64     `json:"id,omitempty"`
+	Login         string    `json:"login,omitempty"`
+	Password      string    `json:"password,omitempty"`
+	Email         string    `json:"email,omitempty"`
+	Admin         bool      `json:"admin,omitempty"`
+	Friends       []int64   `json:"friends,omitempty"`
+	Token         string    `json:"token,omitempty"`
+	Last_activity time.Time `json:"last_activity,omitempty"`
 }
 
 type Request struct {
